@@ -3,20 +3,29 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('tierlists');
+  try {
+    const posts = await getCollection('tierlists');
 
-  console.log('🧪 Fetched tierlists:', posts.length);
+    console.log('🔍 All tierlist entries:', posts.length);
 
-  return posts
-    .filter((post) => {
-      const isValid = post && typeof post.slug === 'string' && post.slug.trim() !== '';
-      if (!isValid) console.warn('⚠️ Invalid post skipped:', post);
+    const validPosts = posts.filter((post) => {
+      const isValid = post && typeof post.slug === 'string' && post.slug.trim().length > 0;
+      if (!isValid) {
+        console.warn('⚠️ Skipping invalid post:', post?.id ?? '[unknown id]', 'with slug:', post?.slug);
+      }
       return isValid;
-    })
-    .map((post) => ({
+    });
+
+    console.log('✅ Valid posts after filtering:', validPosts.length);
+
+    return validPosts.map((post) => ({
       params: { slug: post.slug },
-      props: { post }
+      props: { post },
     }));
+  } catch (err) {
+    console.error('💥 getStaticPaths crashed:', err);
+    return [];
+  }
 }
 
 const { post } = Astro.props;
