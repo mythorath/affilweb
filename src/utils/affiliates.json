@@ -1,0 +1,30 @@
+{
+  "amazon": {
+    "baseUrl": "https://amzn.to/",
+    "trackingId": "trendtiers-20"
+  },
+  "bestbuy": {
+    "baseUrl": "https://bestbuy.7tiv.net/c/",
+    "trackingId": "123456"
+  },
+  "newegg": {
+    "baseUrl": "https://click.linksynergy.com/deeplink?",
+    "trackingId": "newegg-affiliate-id"
+  },
+  "products": {
+    "arctis-pro-wireless": {
+      "amazon": "https://amzn.to/3XYZ123",
+      "bestbuy": "https://bestbuy.7tiv.net/c/123456/product-id",
+      "price": "$329.99"
+    },
+    "audeze-maxwell": {
+      "amazon": "https://amzn.to/3ABC456",
+      "price": "$399.99"
+    },
+    "hyperx-cloud-alpha-s": {
+      "amazon": "https://amzn.to/3DEF789",
+      "bestbuy": "https://bestbuy.7tiv.net/c/123456/hyperx-alpha",
+      "price": "$129.99"
+    }
+  }
+}

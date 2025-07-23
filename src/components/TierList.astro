@@ -1,0 +1,83 @@
+---
+// TierList.astro - Component for displaying tiered product recommendations
+export interface Props {
+  tiers: {
+    [key: string]: Array<{
+      name: string;
+      review: string;
+      link: string;
+    }>;
+  };
+}
+
+const { tiers } = Astro.props;
+
+// Define tier order to ensure consistent display
+const tierOrder = ['S', 'A', 'B', 'C', 'D', 'F'];
+
+// Get only the tiers that exist in the data, in the correct order
+const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length > 0);
+---
+
+<div class="tier-list">
+  {sortedTiers.map((tierKey) => (
+    <section class="tier-section mb-6">
+      <h2 class="tier-heading text-xl font-bold mb-4 bg-gray-100 p-4 rounded">
+        Tier {tierKey}
+      </h2>
+      
+      <div class="products-grid">
+        {tiers[tierKey].map((product) => (
+          <div class="product-card bg-white border border-gray-200 p-4 rounded mb-4 shadow-sm">
+            <h3 class="product-name text-lg font-semibold mb-2">
+              {product.name}
+            </h3>
+            
+            <p class="product-review text-gray-700 mb-3">
+              {product.review}
+            </p>
+            
+            <a 
+              href={product.link}
+              class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+              rel="sponsored"
+              target="_blank"
+            >
+              Buy Now
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+</div>
+
+<style>
+  .tier-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .tier-heading {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border-left: 4px solid #3b82f6;
+  }
+  
+  .product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .buy-now-button {
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .buy-now-button:hover {
+    text-decoration: none;
+  }
+</style>
