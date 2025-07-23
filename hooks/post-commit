@@ -1,0 +1,5 @@
+#!/bin/sh
+# Post-commit hook wrapper for Windows
+# This will execute the PowerShell version of the hook
+
+powershell.exe -ExecutionPolicy Bypass -File ".git/hooks/post-commit.ps1"
