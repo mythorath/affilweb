@@ -1,0 +1,420 @@
+﻿# Manual Diff Summary
+# Generated on: 07/23/2025 14:57:21
+# Branch: main
+# From: f39789a
+# To: HEAD (a2102396783a557cb198df5294a465e6fc028b4b)
+# Files changed:
+#   .gitignore
+#   DIFF_SYSTEM.md
+#   create-diff.ps1
+#   hooks/pre-push
+#   hooks/pre-push.ps1
+#   install-hooks.ps1
+
+diff --git a/.gitignore b/.gitignore
+index 2692d92..cce1430 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -58,3 +58,6 @@ yarn-error.log*
+ 
+ # Node modules (if using Node.js)
+ node_modules/
++
++# Diff files are tracked, but adding comment for clarity
++# diffs/ - This directory contains auto-generated diff files
+diff --git a/DIFF_SYSTEM.md b/DIFF_SYSTEM.md
+new file mode 100644
+index 0000000..48201c2
+--- /dev/null
++++ b/DIFF_SYSTEM.md
+@@ -0,0 +1,113 @@
++# Diff System Documentation
++
++This repository is configured to automatically create unique diff files for every push to GitHub. This helps maintain a history of changes and makes it easy to review what was modified in each update.
++
++## How It Works
++
++### Automatic Diff Generation
++- **Pre-push Hook**: Every time you push changes to GitHub, a pre-push Git hook automatically runs
++- **Unique Files**: Each diff gets a unique filename with timestamp and commit hash
++- **Complete History**: Diff files are committed to the repository, creating a permanent record
++
++### File Naming Convention
++```
++diffs/diff_YYYYMMDD_HHMMSS_[commit-hash].patch
++diffs/diff_YYYYMMDD_HHMMSS_initial_[commit-hash].patch  (for first push)
++```
++
++Example: `diffs/diff_20250723_143022_a1b2c3d.patch`
++
++## Diff File Contents
++
++Each diff file includes:
++- **Header Summary**: Date, branch, commit information
++- **File List**: All files that were changed
++- **Full Diff**: Complete diff showing all changes
++
++Example header:
++```
++# Diff Summary
++# Generated on: 7/23/2025 2:30:22 PM
++# Branch: main
++# From commit: abc123...
++# To commit: def456...
++# Files changed:
++#   src/app.py
++#   README.md
++```
++
++## Manual Diff Creation
++
++You can also create diff files manually using the provided script:
++
++```powershell
++# Create a diff from last commit to current
++.\create-diff.ps1
++
++# Create a diff from specific commit/branch
++.\create-diff.ps1 -CompareWith "origin/main"
++
++# Save to custom directory
++.\create-diff.ps1 -OutputDir "my-diffs"
++```
++
++## Directory Structure
++
++```
++AffiliateWeb/
++Γö£ΓöÇΓöÇ diffs/                          # Auto-generated diff files
++Γöé   Γö£ΓöÇΓöÇ diff_20250723_143022_a1b2c3d.patch
++Γöé   Γö£ΓöÇΓöÇ diff_20250723_151030_e4f5g6h.patch
++Γöé   ΓööΓöÇΓöÇ ...
++Γö£ΓöÇΓöÇ .git/
++Γöé   ΓööΓöÇΓöÇ hooks/
++Γöé       Γö£ΓöÇΓöÇ pre-push                # Main hook (calls PowerShell)
++Γöé       ΓööΓöÇΓöÇ pre-push.ps1           # PowerShell implementation
++Γö£ΓöÇΓöÇ create-diff.ps1                 # Manual diff creation script
++ΓööΓöÇΓöÇ ...
++```
++
++## Benefits
++
++1. **Change Tracking**: Easy to see what changed in each push
++2. **Code Review**: Simplified review process for team members
++3. **Rollback Reference**: Quick reference for reverting changes
++4. **Documentation**: Automatic documentation of development progress
++5. **Debugging**: Easier to identify when issues were introduced
++
++## Configuration
++
++The system is pre-configured and should work automatically. The hooks are designed to:
++- Work on Windows with PowerShell
++- Handle both initial and subsequent pushes
++- Only create diffs when there are actual changes
++- Automatically commit diff files to maintain history
++
++## Troubleshooting
++
++If diffs aren't being created:
++
++1. **Check Hook Permissions**: Ensure the pre-push hook is executable
++2. **PowerShell Execution Policy**: Make sure PowerShell can run scripts
++3. **Git Configuration**: Verify hooks are enabled in your Git configuration
++
++To manually test the hook:
++```powershell
++# Run the PowerShell script directly
++.\.git\hooks\pre-push.ps1
++```
++
++## Customization
++
++You can modify the hook behavior by editing `.git\hooks\pre-push.ps1`:
++- Change diff format options
++- Modify filename patterns
++- Add additional metadata
++- Change commit message format
++
++## Notes
++
++- Diff files are tracked in Git and will be pushed to the remote repository
++- Empty diffs (no changes) are automatically discarded
++- The system uses Git's built-in diff functionality for accuracy
++- All diff files use UTF-8 encoding for proper character support
+diff --git a/create-diff.ps1 b/create-diff.ps1
+new file mode 100644
+index 0000000..8faa2ce
+--- /dev/null
++++ b/create-diff.ps1
+@@ -0,0 +1,79 @@
++# Manual Diff Generator Script
++# Run this script to manually create a diff file for current changes
++
++param(
++    [string]$OutputDir = "diffs",
++    [string]$CompareWith = "HEAD~1"
++)
++
++# Ensure we're in a git repository
++if (!(Test-Path ".git")) {
++    Write-Error "Not in a git repository. Please run this script from the repository root."
++    exit 1
++}
++
++# Create output directory if it doesn't exist
++if (!(Test-Path $OutputDir)) {
++    New-Item -ItemType Directory -Path $OutputDir | Out-Null
++    Write-Host "Created directory: $OutputDir"
++}
++
++# Get current information
++$currentBranch = git symbolic-ref --short HEAD
++$currentCommit = git rev-parse HEAD
++$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
++$shortCommit = $currentCommit.Substring(0, 7)
++
++# Create diff filename
++$diffFilename = "$OutputDir/manual_diff_${timestamp}_${shortCommit}.patch"
++
++Write-Host "Generating diff from $CompareWith to HEAD..."
++
++# Generate the diff
++$diffOutput = git diff $CompareWith..HEAD
++
++if ([string]::IsNullOrWhiteSpace($diffOutput)) {
++    Write-Host "No changes found between $CompareWith and HEAD"
++    exit 0
++}
++
++# Get changed files
++$changedFiles = git diff --name-only $CompareWith..HEAD
++
++# Create summary content
++$summaryContent = @"
++# Manual Diff Summary
++# Generated on: $(Get-Date)
++# Branch: $currentBranch
++# From: $CompareWith
++# To: HEAD ($currentCommit)
++# Files changed:
++"@
++
++foreach ($file in $changedFiles) {
++    $summaryContent += "`n#   $file"
++}
++
++$summaryContent += "`n`n"
++
++# Combine summary and diff
++$fullContent = $summaryContent + $diffOutput
++
++# Write to file
++$fullContent | Out-File -FilePath $diffFilename -Encoding UTF8
++
++Write-Host "Diff file created: $diffFilename"
++Write-Host "Changed files count: $($changedFiles.Count)"
++
++# Ask if user wants to add to git
++$response = Read-Host "Add this diff file to git? (y/N)"
++if ($response -eq "y" -or $response -eq "Y") {
++    git add $diffFilename
++    Write-Host "Added $diffFilename to git staging area"
++    
++    $commitResponse = Read-Host "Commit the diff file? (y/N)"
++    if ($commitResponse -eq "y" -or $commitResponse -eq "Y") {
++        git commit -m "Add manual diff file: $diffFilename"
++        Write-Host "Committed diff file to repository"
++    }
++}
+diff --git a/hooks/pre-push b/hooks/pre-push
+new file mode 100644
+index 0000000..b28d8f3
+--- /dev/null
++++ b/hooks/pre-push
+@@ -0,0 +1,5 @@
++#!/bin/sh
++# Pre-push hook wrapper for Windows
++# This will execute the PowerShell version of the hook
++
++powershell.exe -ExecutionPolicy Bypass -File ".git/hooks/pre-push.ps1"
+diff --git a/hooks/pre-push.ps1 b/hooks/pre-push.ps1
+new file mode 100644
+index 0000000..a64d754
+--- /dev/null
++++ b/hooks/pre-push.ps1
+@@ -0,0 +1,122 @@
++# Pre-push hook to create diff files for each push (PowerShell version)
++
++# Get the current branch
++$currentBranch = git symbolic-ref --short HEAD
++
++# Get the remote branch reference
++$remoteBranch = "origin/$currentBranch"
++
++# Create diffs directory if it doesn't exist
++if (!(Test-Path "diffs")) {
++    New-Item -ItemType Directory -Path "diffs" | Out-Null
++}
++
++# Get the current timestamp for unique filename
++$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
++
++# Get the current commit hash
++$currentCommit = git rev-parse HEAD
++
++# Check if remote branch exists
++$remoteBranchExists = $false
++try {
++    git rev-parse --verify $remoteBranch 2>$null | Out-Null
++    $remoteBranchExists = $true
++} catch {
++    $remoteBranchExists = $false
++}
++
++if ($remoteBranchExists) {
++    # Get the last pushed commit
++    $lastPushed = git rev-parse $remoteBranch
++    
++    # Create diff file name
++    $shortCommit = $currentCommit.Substring(0, 7)
++    $diffFilename = "diffs/diff_${timestamp}_${shortCommit}.patch"
++    
++    # Generate the diff
++    git diff $lastPushed..HEAD | Out-File -FilePath $diffFilename -Encoding UTF8
++    
++    # Check if diff file has content
++    if ((Get-Item $diffFilename).Length -gt 0) {
++        Write-Host "Created diff file: $diffFilename"
++        
++        # Get file changes list
++        $changedFiles = git diff --name-only $lastPushed..HEAD
++        
++        # Create summary content
++        $summaryContent = @"
++# Diff Summary
++# Generated on: $(Get-Date)
++# Branch: $currentBranch
++# From commit: $lastPushed
++# To commit: $currentCommit
++# Files changed:
++"@
++        
++        foreach ($file in $changedFiles) {
++            $summaryContent += "`n#   $file"
++        }
++        
++        $summaryContent += "`n"
++        
++        # Read the original diff content
++        $diffContent = Get-Content $diffFilename -Raw
++        
++        # Combine summary and diff
++        $fullContent = $summaryContent + $diffContent
++        
++        # Write back to file
++        $fullContent | Out-File -FilePath $diffFilename -Encoding UTF8
++        
++        # Add the diff file to git and commit it
++        git add $diffFilename
++        git commit -m "Add diff file: $diffFilename" --no-verify
++    } else {
++        # Remove empty diff file
++        Remove-Item $diffFilename
++        Write-Host "No changes to create diff for"
++    }
++} else {
++    # First push - create diff against empty tree
++    $shortCommit = $currentCommit.Substring(0, 7)
++    $diffFilename = "diffs/diff_${timestamp}_initial_${shortCommit}.patch"
++    
++    # Generate diff for all files (against empty tree)
++    git diff 4b825dc642cb6eb9a060e54bf8d69288fbee4904..HEAD | Out-File -FilePath $diffFilename -Encoding UTF8
++    
++    # Get all files in the repository
++    $allFiles = git ls-tree -r --name-only HEAD
++    
++    # Create summary content
++    $summaryContent = @"
++# Initial Diff Summary
++# Generated on: $(Get-Date)
++# Branch: $currentBranch
++# Initial commit: $currentCommit
++# Files added:
++"@
++    
++    foreach ($file in $allFiles) {
++        $summaryContent += "`n#   $file"
++    }
++    
++    $summaryContent += "`n"
++    
++    # Read the original diff content
++    $diffContent = Get-Content $diffFilename -Raw
++    
++    # Combine summary and diff
++    $fullContent = $summaryContent + $diffContent
++    
++    # Write back to file
++    $fullContent | Out-File -FilePath $diffFilename -Encoding UTF8
++    
++    Write-Host "Created initial diff file: $diffFilename"
++    
++    # Add the diff file to git and commit it
++    git add $diffFilename
++    git commit -m "Add initial diff file: $diffFilename" --no-verify
++}
++
++exit 0
+diff --git a/install-hooks.ps1 b/install-hooks.ps1
+new file mode 100644
+index 0000000..c5b5341
+--- /dev/null
++++ b/install-hooks.ps1
+@@ -0,0 +1,46 @@
++# Git Hooks Installation Script
++# Run this script to install the pre-push hook for automatic diff generation
++
++Write-Host "Installing Git hooks for automatic diff generation..."
++
++# Check if we're in a git repository
++if (!(Test-Path ".git")) {
++    Write-Error "Not in a git repository. Please run this script from the repository root."
++    exit 1
++}
++
++# Create .git/hooks directory if it doesn't exist
++$hooksDir = ".git\hooks"
++if (!(Test-Path $hooksDir)) {
++    New-Item -ItemType Directory -Path $hooksDir | Out-Null
++}
++
++# Copy hooks from the tracked hooks directory
++try {
++    Copy-Item "hooks\pre-push" "$hooksDir\pre-push" -Force
++    Copy-Item "hooks\pre-push.ps1" "$hooksDir\pre-push.ps1" -Force
++    
++    Write-Host "Γ£ô Installed pre-push hook"
++    Write-Host "Γ£ô Installed pre-push.ps1 script"
++    
++    # Test if PowerShell execution policy allows running scripts
++    $executionPolicy = Get-ExecutionPolicy
++    if ($executionPolicy -eq "Restricted") {
++        Write-Warning "PowerShell execution policy is Restricted. You may need to run:"
++        Write-Warning "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser"
++    }
++    
++    Write-Host ""
++    Write-Host "Git hooks installed successfully!"
++    Write-Host "The pre-push hook will now automatically create diff files when you push to GitHub."
++    Write-Host ""
++    Write-Host "To test the system:"
++    Write-Host "1. Make some changes to files"
++    Write-Host "2. Commit the changes: git add . && git commit -m 'Test changes'"
++    Write-Host "3. Push to GitHub: git push"
++    Write-Host "4. Check the 'diffs' directory for the generated diff file"
++    
++} catch {
++    Write-Error "Failed to install hooks: $_"
++    exit 1
++}
+
