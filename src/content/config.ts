@@ -6,7 +6,6 @@ const tierlistsCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.date(),
-    slug: z.string(),
     image: z.string().optional(),
     tags: z.array(z.string()),
     products: z.array(z.object({
