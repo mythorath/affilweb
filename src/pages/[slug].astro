@@ -13,13 +13,23 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+// Use products from frontmatter if available, otherwise generate placeholder
+const products = post.data.products || [
+  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 1`, url: `https://amzn.to/${post.data.slug}-1` },
+  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 2`, url: `https://amzn.to/${post.data.slug}-2` },
+  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 3`, url: `https://amzn.to/${post.data.slug}-3` },
+];
 ---
 
 <Layout 
   title={post.data.title}
   description={post.data.description}
+  slug={post.data.slug}
   image={post.data.image}
+  tags={post.data.tags}
   pubDate={post.data.pubDate}
+  products={products}
 >
   <article class="prose lg:prose-xl mx-auto">
     <header class="mb-8 text-center">

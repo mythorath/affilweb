@@ -9,6 +9,10 @@ const tierlistsCollection = defineCollection({
     slug: z.string(),
     image: z.string().optional(),
     tags: z.array(z.string()),
+    products: z.array(z.object({
+      name: z.string(),
+      url: z.string(),
+    })).optional(),
   }),
 });
 

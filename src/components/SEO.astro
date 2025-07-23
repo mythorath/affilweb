@@ -1,0 +1,123 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  slug: string;
+  image?: string;
+  tags?: string[];
+  pubDate?: string;
+  products?: Array<{
+    name: string;
+    url: string;
+  }>;
+}
+
+const { 
+  title, 
+  description, 
+  slug, 
+  image = '/images/default-og.jpg', 
+  tags = [], 
+  pubDate = new Date().toISOString().split('T')[0],
+  products = []
+} = Astro.props;
+
+const canonicalURL = `https://trendtiers.com/${slug}`;
+const fullImageURL = image.startsWith('http') ? image : `https://trendtiers.com${image}`;
+
+// Generate JSON-LD schema for ItemList
+const jsonLD = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": title,
+  "description": description,
+  "url": canonicalURL,
+  "datePublished": pubDate,
+  "numberOfItems": products.length,
+  "itemListElement": products.map((product, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": product.name,
+    "url": product.url
+  }))
+};
+
+// Clean title for proper formatting
+const pageTitle = title.includes('TrendTiers') ? title : `${title} | TrendTiers`;
+---
+
+<head>
+  <!-- Basic SEO -->
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content={tags.join(', ')} />
+  <link rel="canonical" href={canonicalURL} />
+  
+  <!-- Viewport and charset -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={fullImageURL} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="TrendTiers" />
+  <meta property="article:published_time" content={pubDate} />
+  {tags.map(tag => <meta property="article:tag" content={tag} />)}
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={canonicalURL} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={fullImageURL} />
+  <meta name="twitter:site" content="@trendtiers" />
+  <meta name="twitter:creator" content="@trendtiers" />
+  
+  <!-- Additional SEO -->
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="TrendTiers" />
+  <meta name="generator" content="Astro" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  
+  <!-- JSON-LD Structured Data -->
+  {products.length > 0 && (
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLD)} />
+  )}
+  
+  <!-- Additional structured data for article -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "image": fullImageURL,
+    "datePublished": pubDate,
+    "dateModified": pubDate,
+    "author": {
+      "@type": "Organization",
+      "name": "TrendTiers",
+      "url": "https://trendtiers.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "TrendTiers",
+      "url": "https://trendtiers.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://trendtiers.com/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalURL
+    }
+  })} />
+</head>

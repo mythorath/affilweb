@@ -165,11 +165,20 @@ function generateMDXContent(data, topic) {
 
   // Generate the tiers object for the TierList component
   const tiersObject = {};
+  const allProducts = [];
+  
   Object.entries(data.tiers).forEach(([tier, products]) => {
-    tiersObject[tier] = products.map(product => ({
-      ...product,
-      link: generateAffiliateLink(product.name)
-    }));
+    tiersObject[tier] = products.map(product => {
+      const productLink = generateAffiliateLink(product.name);
+      allProducts.push({
+        name: product.name,
+        url: productLink
+      });
+      return {
+        ...product,
+        link: productLink
+      };
+    });
   });
 
   const mdxContent = `---
@@ -179,6 +188,7 @@ pubDate: ${currentDate}
 slug: ${slug}
 image: /images/${slug}.jpg
 tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
+products: ${JSON.stringify(allProducts, null, 2)}
 ---
 
 import TierList from '../../components/TierList.astro'
