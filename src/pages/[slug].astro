@@ -5,10 +5,12 @@ import Layout from '../layouts/Layout.astro';
 export async function getStaticPaths() {
   const posts = await getCollection('tierlists');
   
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  return posts
+    .filter(post => post && post.slug) // safeguard
+    .map((post) => ({
+      params: { slug: post.slug },
+      props: { post }
+    }));
 }
 
 const { post } = Astro.props;
