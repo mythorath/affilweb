@@ -33,18 +33,30 @@ if ($lastPushed -and $lastPushed -ne $currentCommit) {
     $shortCommit = $currentCommit.Substring(0, 7)
     $diffFilename = "diffs/diff_${timestamp}_${shortCommit}.patch"
     
-    # Generate the diff
-    $diffContent = git diff $lastPushed..$currentCommit
-    
-    # Check if there are changes
-    if ($diffContent -and $diffContent.Trim() -ne "") {
-        Write-Host "Created diff file: $diffFilename"
+    # Generate the diff using a temp file for better compatibility
+    $tempFile = [System.IO.Path]::GetTempFileName()
+    try {
+        & git diff $lastPushed $currentCommit > $tempFile 2>&1
+        $diffContent = Get-Content $tempFile -Raw
+        Remove-Item $tempFile
         
-        # Get file changes list
-        $changedFiles = git diff --name-only $lastPushed..$currentCommit
-        
-        # Create summary content
-        $summaryContent = @"
+        # Check if there are actual changes and no error messages
+        if ($diffContent -and $diffContent.Trim() -ne "" -and !$diffContent.Contains("usage: git diff")) {
+            Write-Host "Created diff file: $diffFilename"
+            
+            # Get file changes list
+            $changedFiles = @()
+            try {
+                $changedFiles = & git diff --name-only $lastPushed $currentCommit 2>$null
+                if ($LASTEXITCODE -ne 0) {
+                    $changedFiles = @()
+                }
+            } catch {
+                $changedFiles = @()
+            }
+            
+            # Create summary content
+            $summaryContent = @"
 # Diff Summary
 # Generated on: $(Get-Date)
 # Branch: $currentBranch
@@ -52,69 +64,31 @@ if ($lastPushed -and $lastPushed -ne $currentCommit) {
 # To commit: $currentCommit
 # Files changed:
 "@
-        
-        foreach ($file in $changedFiles) {
-            $summaryContent += "`n#   $file"
+            
+            foreach ($file in $changedFiles) {
+                $summaryContent += "`n#   $file"
+            }
+            
+            $summaryContent += "`n`n"
+            
+            # Combine summary and diff
+            $fullContent = $summaryContent + $diffContent
+            
+            # Write to file
+            $fullContent | Out-File -FilePath $diffFilename -Encoding UTF8
+            
+            # Add the diff file to git and commit it
+            git add $diffFilename
+            git commit -m "Add diff file: $diffFilename" --no-verify
+        } else {
+            Write-Host "No changes to create diff for"
         }
-        
-        $summaryContent += "`n`n"
-        
-        # Combine summary and diff
-        $fullContent = $summaryContent + $diffContent
-        
-        # Write to file
-        $fullContent | Out-File -FilePath $diffFilename -Encoding UTF8
-        
-        # Add the diff file to git and commit it
-        git add $diffFilename
-        git commit -m "Add diff file: $diffFilename" --no-verify
-    } else {
-        Write-Host "No changes to create diff for"
+    } catch {
+        if (Test-Path $tempFile) { Remove-Item $tempFile }
+        Write-Host "Error generating diff: $_"
     }
 } else {
-    # First push or no changes - create diff against empty tree for initial commit
-    $shortCommit = $currentCommit.Substring(0, 7)
-    $diffFilename = "diffs/diff_${timestamp}_initial_${shortCommit}.patch"
-    
-    # Generate diff for all files (against empty tree)
-    $diffContent = git show --pretty=format: --name-only $currentCommit
-    
-    if ($diffContent) {
-        # Get all files in the repository
-        $allFiles = git ls-tree -r --name-only HEAD
-        
-        # Create summary content
-        $summaryContent = @"
-# Initial Diff Summary
-# Generated on: $(Get-Date)
-# Branch: $currentBranch
-# Initial commit: $currentCommit
-# Files added:
-"@
-        
-        foreach ($file in $allFiles) {
-            $summaryContent += "`n#   $file"
-        }
-        
-        $summaryContent += "`n`n"
-        
-        # Get the actual diff content
-        $fullDiff = git show $currentCommit
-        
-        # Combine summary and diff
-        $fullContent = $summaryContent + $fullDiff
-        
-        # Write to file
-        $fullContent | Out-File -FilePath $diffFilename -Encoding UTF8
-        
-        Write-Host "Created initial diff file: $diffFilename"
-        
-        # Add the diff file to git and commit it
-        git add $diffFilename
-        git commit -m "Add initial diff file: $diffFilename" --no-verify
-    } else {
-        Write-Host "No changes to create diff for"
-    }
+    Write-Host "No previous push found or no changes to create diff for"
 }
 
 exit 0
