@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const tierListPosts = await getCollection('tierlists');
+  
+  return tierListPosts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout 
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image}
+  pubDate={post.data.pubDate}
+>
+  <article class="prose lg:prose-xl mx-auto">
+    <header class="mb-8 text-center">
+      <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
+      
+      <div class="text-gray-600 mb-4">
+        <time>
+          {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long', 
+            day: 'numeric'
+          })}
+        </time>
+      </div>
+      
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
+          {post.data.tags.map((tag) => (
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+    
+    <div class="tier-list-content">
+      <Content />
+    </div>
+    
+    <footer class="mt-12 pt-8 border-t border-gray-200">
+      <div class="text-center text-gray-600">
+        <p class="mb-2">
+          <strong>Affiliate Disclosure:</strong> This post contains affiliate links. 
+          We may earn a commission if you make a purchase through these links at no additional cost to you.
+        </p>
+        <a href="/" class="text-blue-600 hover:underline">← Back to Home</a>
+      </div>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  .tier-list-content :global(.tier-list) {
+    margin: 2rem 0;
+  }
+  
+  .tier-list-content :global(h1) {
+    margin-top: 0;
+  }
+  
+  .tier-list-content :global(p) {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+  }
+</style>
