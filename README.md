@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
 
 ## Getting Started
 
-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
+This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
+
+## Features
+
+- **Automatic Diff Generation**: Creates diff files for every commit and push
+- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
+- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
+- **Complete History**: Maintains a permanent record of all changes
 
 ## Installation
 
@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
 
 ## Diff System
 
-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
 
 ## Contributing
 
