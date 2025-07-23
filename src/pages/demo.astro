@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TierList from '../components/TierList.astro';
+
+const sampleTiers = {
+  "S": [
+    { 
+      name: "Premium Product A", 
+      review: "Exceptional quality and performance. Worth every penny for serious users.", 
+      link: "https://amzn.to/premium-a" 
+    }
+  ],
+  "A": [
+    { 
+      name: "Great Product B", 
+      review: "Excellent value for money with solid performance across all metrics.", 
+      link: "https://amzn.to/great-b" 
+    },
+    { 
+      name: "Reliable Product C", 
+      review: "Consistent performer with good build quality. Perfect for most users.", 
+      link: "https://amzn.to/reliable-c" 
+    }
+  ],
+  "B": [
+    { 
+      name: "Decent Product D", 
+      review: "Good budget option with some compromises but still functional.", 
+      link: "https://amzn.to/decent-d" 
+    }
+  ]
+};
+---
+
+<Layout 
+  title="TierList Component Demo"
+  description="Example demonstration of the TierList Astro component for affiliate product rankings"
+>
+  <div class="prose lg:prose-xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">TierList Component Demo</h1>
+    
+    <p class="text-gray-600 mb-8">
+      This page demonstrates the TierList Astro component in action. 
+      Each tier displays products with their reviews and affiliate links.
+    </p>
+    
+    <TierList tiers={sampleTiers} />
+    
+    <div class="mt-12 p-6 bg-blue-50 rounded-lg">
+      <h2 class="text-xl font-semibold mb-4">Component Features:</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>Responsive design with Tailwind CSS</li>
+        <li>Semantic HTML structure for SEO</li>
+        <li>Proper affiliate link attributes (rel="sponsored", target="_blank")</li>
+        <li>Hover effects and smooth transitions</li>
+        <li>Flexible tier system (S, A, B, C, D, F)</li>
+        <li>TypeScript support for type safety</li>
+      </ul>
+    </div>
+  </div>
+</Layout>

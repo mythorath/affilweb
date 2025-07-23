@@ -59,5 +59,12 @@ yarn-error.log*
 # Node modules (if using Node.js)
 node_modules/
 
+# Astro build output
+dist/
+.astro/
+
+# Embedded repositories
+molecular-meridian/
+
 # Diff files are tracked, but adding comment for clarity
 # diffs/ - This directory contains auto-generated diff files

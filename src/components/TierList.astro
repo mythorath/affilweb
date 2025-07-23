@@ -1,5 +1,7 @@
 ---
 // TierList.astro - Component for displaying tiered product recommendations
+import AffiliateButton from './AffiliateButton.astro';
+
 export interface Props {
   tiers: {
     [key: string]: Array<{
@@ -8,9 +10,10 @@ export interface Props {
       link: string;
     }>;
   };
+  useButtons?: boolean;
 }
 
-const { tiers } = Astro.props;
+const { tiers, useButtons = false } = Astro.props;
 
 // Define tier order to ensure consistent display
 const tierOrder = ['S', 'A', 'B', 'C', 'D', 'F'];
@@ -37,14 +40,18 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
               {product.review}
             </p>
             
-            <a 
-              href={product.link}
-              class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-              rel="sponsored"
-              target="_blank"
-            >
-              Buy Now
-            </a>
+            {useButtons ? (
+              <AffiliateButton href={product.link} />
+            ) : (
+              <a 
+                href={product.link}
+                class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                rel="sponsored"
+                target="_blank"
+              >
+                Buy Now
+              </a>
+            )}
           </div>
         ))}
       </div>

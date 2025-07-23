@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="TrendTiers - Best Product Rankings & Affiliate Reviews"
+  description="Discover the best products through our comprehensive tier list rankings. Expert reviews and recommendations for gaming, tech, lifestyle, and more."
+>
+  <div class="text-center">
+    <h1 class="text-4xl font-bold text-gray-900 mb-6">
+      Welcome to TrendTiers
+    </h1>
+    
+    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+      The ultimate destination for tier list product rankings. 
+      We test, review, and rank the best products so you don't have to.
+    </p>
+    
+    <div class="grid md:grid-cols-3 gap-8 mt-12">
+      <div class="bg-white p-6 rounded-lg shadow-sm border">
+        <h3 class="text-xl font-semibold mb-4">🎮 Gaming</h3>
+        <p class="text-gray-600 mb-4">Headsets, keyboards, mice, and gaming accessories ranked by performance.</p>
+        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
+      </div>
+      
+      <div class="bg-white p-6 rounded-lg shadow-sm border">
+        <h3 class="text-xl font-semibold mb-4">💻 Tech</h3>
+        <p class="text-gray-600 mb-4">Laptops, phones, and gadgets tested for value and performance.</p>
+        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
+      </div>
+      
+      <div class="bg-white p-6 rounded-lg shadow-sm border">
+        <h3 class="text-xl font-semibold mb-4">🏠 Lifestyle</h3>
+        <p class="text-gray-600 mb-4">Home, fitness, and everyday products ranked for quality and value.</p>
+        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
+      </div>
+    </div>
+    
+    <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl">
+      <h2 class="text-2xl font-bold mb-4">How Our Tier Lists Work</h2>
+      <div class="grid md:grid-cols-6 gap-4 text-center">
+        <div class="bg-red-100 p-3 rounded-lg">
+          <div class="font-bold text-red-700">S Tier</div>
+          <div class="text-sm text-red-600">Best in class</div>
+        </div>
+        <div class="bg-green-100 p-3 rounded-lg">
+          <div class="font-bold text-green-700">A Tier</div>
+          <div class="text-sm text-green-600">Excellent</div>
+        </div>
+        <div class="bg-blue-100 p-3 rounded-lg">
+          <div class="font-bold text-blue-700">B Tier</div>
+          <div class="text-sm text-blue-600">Good</div>
+        </div>
+        <div class="bg-yellow-100 p-3 rounded-lg">
+          <div class="font-bold text-yellow-700">C Tier</div>
+          <div class="text-sm text-yellow-600">Average</div>
+        </div>
+        <div class="bg-orange-100 p-3 rounded-lg">
+          <div class="font-bold text-orange-700">D Tier</div>
+          <div class="text-sm text-orange-600">Below average</div>
+        </div>
+        <div class="bg-gray-100 p-3 rounded-lg">
+          <div class="font-bold text-gray-700">F Tier</div>
+          <div class="text-sm text-gray-600">Avoid</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
