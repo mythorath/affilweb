@@ -1,0 +1,5 @@
+#!/bin/sh
+# Pre-push hook wrapper for Windows
+# This will execute the PowerShell version of the hook
+
+powershell.exe -ExecutionPolicy Bypass -File ".git/hooks/pre-push.ps1"
