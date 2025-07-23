@@ -29,16 +29,51 @@ $diffFilename = "$OutputDir/manual_diff_${timestamp}_${shortCommit}.patch"
 
 Write-Host "Generating diff from $CompareWith to HEAD..."
 
-# Generate the diff
-$diffOutput = git diff $CompareWith..HEAD
+# Test if the comparison commit exists
+try {
+    git rev-parse --verify "$CompareWith" 2>$null | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Commit '$CompareWith' not found"
+        exit 1
+    }
+} catch {
+    Write-Error "Commit '$CompareWith' not found"
+    exit 1
+}
 
-if ([string]::IsNullOrWhiteSpace($diffOutput)) {
-    Write-Host "No changes found between $CompareWith and HEAD"
-    exit 0
+# Generate the diff using git diff-tree or git show for better compatibility
+$tempFile = [System.IO.Path]::GetTempFileName()
+try {
+    # Use git show to get changes if comparing with a single commit
+    if ($CompareWith -eq "HEAD~1" -or $CompareWith -match "^[a-f0-9]+$") {
+        & git diff "$CompareWith" HEAD > $tempFile 2>&1
+    } else {
+        & git diff "$CompareWith..HEAD" > $tempFile 2>&1
+    }
+    
+    $diffContent = Get-Content $tempFile -Raw
+    Remove-Item $tempFile
+    
+    if ([string]::IsNullOrWhiteSpace($diffContent) -or $diffContent.Contains("usage: git diff")) {
+        Write-Host "No changes found between $CompareWith and HEAD"
+        exit 0
+    }
+} catch {
+    Write-Error "Failed to generate diff: $_"
+    if (Test-Path $tempFile) { Remove-Item $tempFile }
+    exit 1
 }
 
 # Get changed files
-$changedFiles = git diff --name-only $CompareWith..HEAD
+$changedFiles = @()
+try {
+    $changedFiles = & git diff --name-only "$CompareWith" HEAD 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        $changedFiles = @()
+    }
+} catch {
+    $changedFiles = @()
+}
 
 # Create summary content
 $summaryContent = @"
@@ -57,7 +92,7 @@ foreach ($file in $changedFiles) {
 $summaryContent += "`n`n"
 
 # Combine summary and diff
-$fullContent = $summaryContent + $diffOutput
+$fullContent = $summaryContent + $diffContent
 
 # Write to file
 $fullContent | Out-File -FilePath $diffFilename -Encoding UTF8
