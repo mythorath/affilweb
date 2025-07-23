@@ -1,0 +1,2894 @@
+﻿# Commit Diff Summary
+# Generated on: 07/23/2025 15:18:37
+# Branch: main
+# Commit: 7f4922a2561f44392fcfede2a2cda590f8e10b8c
+# Previous: e3cb6eb8ad5ac785e680055491f8296c3243cc17
+# Message: Add comprehensive TierList component documentation
+# Files changed:
+#   TIERLIST_COMPONENT.md
+#   diffs/commit_diff_20250723_151739_247ce70.patch
+#   diffs/commit_diff_20250723_151752_e3cb6eb.patch
+
+diff --git a/TIERLIST_COMPONENT.md b/TIERLIST_COMPONENT.md
+new file mode 100644
+index 0000000..f3fa945
+--- /dev/null
++++ b/TIERLIST_COMPONENT.md
+@@ -0,0 +1,136 @@
++# TierList Astro Component
++
++A semantic, SEO-optimized Astro component for displaying tier list-style product recommendations with affiliate links.
++
++## Features
++
++✅ **Semantic HTML Structure** - Uses proper headings and sections for SEO  
++✅ **Tailwind CSS Styling** - Minimal, responsive design with hover effects  
++✅ **Affiliate Link Support** - Includes `rel="sponsored"` and `target="_blank"`  
++✅ **TypeScript Support** - Full type definitions for props and data  
++✅ **Flexible Tier System** - Supports S, A, B, C, D, F tier rankings  
++✅ **Optional Button Component** - Can use AffiliateButton for enhanced styling  
++
++## Usage
++
++### Basic Usage
++
++```astro
++---
++import TierList from '../components/TierList.astro';
++
++const tiers = {
++  "S": [
++    { 
++      name: "Premium Product", 
++      review: "Exceptional quality and performance", 
++      link: "https://amzn.to/premium" 
++    }
++  ],
++  "A": [
++    { 
++      name: "Great Product", 
++      review: "Excellent value for money", 
++      link: "https://amzn.to/great" 
++    }
++  ]
++};
++---
++
++<TierList tiers={tiers} />
++```
++
++### With AffiliateButton Component
++
++```astro
++<TierList tiers={tiers} useButtons={true} />
++```
++
++## Props
++
++| Prop | Type | Default | Description |
++|------|------|---------|-------------|
++| `tiers` | `TierData` | required | Object with tier keys and product arrays |
++| `useButtons` | `boolean` | `false` | Use AffiliateButton component instead of basic links |
++
++## Data Structure
++
++```typescript
++interface Product {
++  name: string;      // Product name
++  review: string;    // Short review/description
++  link: string;      // Affiliate URL
++}
++
++interface TierData {
++  [tierKey: string]: Product[];  // e.g., "S": [products], "A": [products]
++}
++```
++
++## Styling
++
++The component uses Tailwind CSS classes:
++
++- `mb-6` - Margin bottom for sections
++- `text-xl` - Large text for tier headings  
++- `bg-gray-100 p-4 rounded` - Styled tier headers
++- `bg-white border p-4 rounded` - Product cards
++- `hover:` effects for interactivity
++
++## SEO Features
++
++- Semantic HTML with proper heading hierarchy (`h2` for tiers, `h3` for products)
++- `rel="sponsored"` on all affiliate links
++- `target="_blank"` for external links
++- Accessibility attributes and hover states
++
++## Example Output
++
++The component renders as:
++
++```html
++<div class="tier-list">
++  <section class="tier-section mb-6">
++    <h2 class="tier-heading text-xl font-bold mb-4 bg-gray-100 p-4 rounded">
++      Tier S
++    </h2>
++    <div class="products-grid">
++      <div class="product-card bg-white border p-4 rounded mb-4">
++        <h3 class="product-name text-lg font-semibold mb-2">
++          Premium Product
++        </h3>
++        <p class="product-review text-gray-700 mb-3">
++          Exceptional quality and performance
++        </p>
++        <a href="https://amzn.to/premium" 
++           class="buy-now-button" 
++           rel="sponsored" 
++           target="_blank">
++          Buy Now
++        </a>
++      </div>
++    </div>
++  </section>
++</div>
++```
++
++## Files Created
++
++- `src/components/TierList.astro` - Main component
++- `src/components/AffiliateButton.astro` - Optional button component
++- `src/types.ts` - TypeScript definitions
++- `src/utils/affiliates.json` - Affiliate link management
++- `src/pages/demo.astro` - Component demonstration
++- `src/content/tierlists/best-gaming-headsets-2025.mdx` - Example content
++
++## Integration
++
++This component is designed for the TrendTiers affiliate website and integrates with:
++
++- Astro static site generation
++- MDX content files
++- Tailwind CSS styling
++- GitHub + Vercel deployment
++- SEO optimization features
++
++The component follows the specifications in `# TrendTiers.md` reference file.
+diff --git a/diffs/commit_diff_20250723_151739_247ce70.patch b/diffs/commit_diff_20250723_151739_247ce70.patch
+new file mode 100644
+index 0000000..34fc980
+--- /dev/null
++++ b/diffs/commit_diff_20250723_151739_247ce70.patch
+@@ -0,0 +1,1716 @@
++﻿# Commit Diff Summary
++# Generated on: 07/23/2025 15:17:39
++# Branch: main
++# Commit: 247ce70bc5ffac5d06e214772fb79cbc43c7c2bf
++# Previous: 8bd2120d6755c9a409ff688d84dacc0c1cc16bd0
++# Message: Add diff file: diffs/diff_20250723_151735_8bd2120.patch
++# Files changed:
++#   diffs/diff_20250723_151735_8bd2120.patch
++
++diff --git a/diffs/diff_20250723_151735_8bd2120.patch b/diffs/diff_20250723_151735_8bd2120.patch
++new file mode 100644
++index 0000000..e2c21c6
++--- /dev/null
+++++ b/diffs/diff_20250723_151735_8bd2120.patch
++@@ -0,0 +1,1700 @@
+++﻿# Diff Summary
+++# Generated on: 07/23/2025 15:17:36
+++# Branch: main
+++# From commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
+++# To commit: 8bd2120d6755c9a409ff688d84dacc0c1cc16bd0
+++# Files changed:
+++#   # TrendTiers.md
+++#   .gitignore
+++#   astro.config.mjs
+++#   diffs/commit_diff_20250723_150354_2b2679e.patch
+++#   diffs/commit_diff_20250723_150409_77fbb03.patch
+++#   diffs/commit_diff_20250723_151515_a5c3347.patch
+++#   diffs/diff_20250723_150405_2b2679e.patch
+++#   package.json
+++#   src/components/AffiliateButton.astro
+++#   src/components/TierList.astro
+++#   src/content/tierlists/best-gaming-headsets-2025.mdx
+++#   src/layouts/Layout.astro
+++#   src/pages/demo.astro
+++#   src/pages/index.astro
+++#   src/types.ts
+++#   src/utils/affiliates.json
+++#   tailwind.config.mjs
+++
+++diff --git a/# TrendTiers.md b/# TrendTiers.md
+++new file mode 100644
+++index 0000000..6874f51
+++--- /dev/null
++++++ b/# TrendTiers.md	
+++@@ -0,0 +1,96 @@
++++# TrendTiers.com – Copilot Reference
++++
++++## 📘 Purpose
++++TrendTiers.com is a fully static, SEO-optimized affiliate website that publishes tier list–style product recommendation articles. Each page is auto-generated using LLMs and features:
++++- Tiered rankings (S, A, B, etc.)
++++- Short reviews and justifications per product
++++- Affiliate links
++++- Stock images
++++- SEO metadata
++++
++++## 🧱 Tech Stack
++++- Astro (static site generator)
++++- MDX content files (1 per tier list)
++++- Minimal JavaScript
++++- GitHub + Vercel for CI/CD
++++- GitHub Copilot for assisted development
++++- No backend or database
++++
++++## 📁 Folder Structure
++++
++++/src
++++/components → TierList and utility UI
++++/content/tierlists → AI-generated MDX articles
++++/pages → Home and dynamic routes
++++/layouts → Site layout
++++/scripts → Generation scripts (AI, scraping, etc.)
++++/public/images → Product images
++++/utils/affiliates.json → Master list of affiliate URLs
++++
++++
++++## 📄 MDX File Format (Tier List)
++++Each article lives at `/src/content/tierlists/{slug}.mdx` and uses:
++++```mdx
++++---
++++title: Best X in YYYY
++++description: SEO meta description
++++pubDate: 2025-07-23
++++slug: best-x-in-yyyy
++++image: /images/example.jpg
++++tags: [tag1, tag2]
++++---
++++
++++import TierList from '../../components/TierList.astro'
++++
++++<TierList
++++  tiers={{
++++    "S": [
++++      { name: "Product A", review: "Excellent for X", link: "https://amzn.to/..." }
++++    ],
++++    "A": [
++++      { name: "Product B", review: "Budget option", link: "https://amzn.to/..." }
++++    ]
++++  }}
++++/>
++++
++++💡 Components Overview
++++TierList.astro
++++
++++Renders each tier (S, A, B...) as a section with the product's name, review, and affiliate link.
++++AffiliateButton.astro (optional)
++++
++++Reusable button with cloaked or dynamic URL via utils/affiliates.json.
++++🌐 SEO
++++
++++Every page should:
++++
++++    Include Open Graph and Twitter metadata in <head>
++++
++++    Inject JSON-LD using schema.org (type: ItemList)
++++
++++    Have a canonical URL
++++
++++🧠 Copilot Behavior
++++
++++    Generate content-first components
++++
++++    Use Astro props and Astro.glob/getCollection for dynamic content
++++
++++    Avoid React/JSX unless explicitly used in components
++++
++++    Assume each page is static and should render without JS
++++
++++🛠 Planned Scripts
++++
++++    generate-tier.js: Uses LLM API to generate an MDX tier list article
++++
++++    find-trends.js: Crawls Reddit/Exploding Topics/Google Trends
++++
++++    GitHub Actions to run the above and deploy to Vercel
++++
++++
++++---
++++
++++Once that’s added to the project root, send me a quick "📌 Reference added" and I’ll give you the first Copilot prompt in the correct order. I’ll wait for each diff before moving forward.
++++
++++Ready?
+++\ No newline at end of file
+++diff --git a/.gitignore b/.gitignore
+++index cce1430..2ceddbe 100644
+++--- a/.gitignore
++++++ b/.gitignore
+++@@ -59,5 +59,12 @@ yarn-error.log*
+++ # Node modules (if using Node.js)
+++ node_modules/
+++ 
++++# Astro build output
++++dist/
++++.astro/
++++
++++# Embedded repositories
++++molecular-meridian/
++++
+++ # Diff files are tracked, but adding comment for clarity
+++ # diffs/ - This directory contains auto-generated diff files
+++diff --git a/astro.config.mjs b/astro.config.mjs
+++new file mode 100644
+++index 0000000..038f942
+++--- /dev/null
++++++ b/astro.config.mjs
+++@@ -0,0 +1,16 @@
++++import { defineConfig } from 'astro/config';
++++import mdx from '@astrojs/mdx';
++++import tailwind from '@astrojs/tailwind';
++++
++++// https://astro.build/config
++++export default defineConfig({
++++  integrations: [
++++    mdx(),
++++    tailwind()
++++  ],
++++  site: 'https://trendtiers.com',
++++  output: 'static',
++++  build: {
++++    format: 'directory'
++++  }
++++});
+++diff --git a/diffs/commit_diff_20250723_150354_2b2679e.patch b/diffs/commit_diff_20250723_150354_2b2679e.patch
+++new file mode 100644
+++index 0000000..1b63975
+++--- /dev/null
++++++ b/diffs/commit_diff_20250723_150354_2b2679e.patch
+++@@ -0,0 +1,55 @@
++++﻿# Commit Diff Summary
++++# Generated on: 07/23/2025 15:03:54
++++# Branch: main
++++# Commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
++++# Previous: 47a11e46126cc2dac19c6f26d4994749f0874c61
++++# Message: Add post-commit diff file for README update
++++# Files changed:
++++#   diffs/commit_diff_20250723_150323_47a11e4.patch
++++
++++diff --git a/diffs/commit_diff_20250723_150323_47a11e4.patch b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++new file mode 100644
++++index 0000000..020092e
++++--- /dev/null
+++++++ b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++@@ -0,0 +1,39 @@
+++++﻿# Commit Diff Summary
+++++# Generated on: 07/23/2025 15:03:23
+++++# Branch: main
+++++# Commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
+++++# Previous: 5a5bcd6e160167f5b51c174ec63c1678eafd9d59
+++++# Message: Test post-commit hook - Update README with enhanced features
+++++# Files changed:
+++++#   README.md
+++++
+++++diff --git a/README.md b/README.md
+++++index ff8abe0..e15204a 100644
+++++--- a/README.md
++++++++ b/README.md
+++++@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
+++++ 
+++++ ## Getting Started
+++++ 
+++++-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
++++++This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
++++++
++++++## Features
++++++
++++++- **Automatic Diff Generation**: Creates diff files for every commit and push
++++++- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
++++++- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
++++++- **Complete History**: Maintains a permanent record of all changes
+++++ 
+++++ ## Installation
+++++ 
+++++@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
+++++ 
+++++ ## Diff System
+++++ 
+++++-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
++++++This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+++++ 
+++++ ## Contributing
+++++ 
+++++
++++
+++diff --git a/diffs/commit_diff_20250723_150409_77fbb03.patch b/diffs/commit_diff_20250723_150409_77fbb03.patch
+++new file mode 100644
+++index 0000000..c6087bf
+++--- /dev/null
++++++ b/diffs/commit_diff_20250723_150409_77fbb03.patch
+++@@ -0,0 +1,70 @@
++++﻿# Commit Diff Summary
++++# Generated on: 07/23/2025 15:04:09
++++# Branch: main
++++# Commit: 77fbb03b1a89a0bfae3ba5f2f6f6456df254c975
++++# Previous: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
++++# Message: Add diff file: diffs/diff_20250723_150405_2b2679e.patch
++++# Files changed:
++++#   diffs/diff_20250723_150405_2b2679e.patch
++++
++++diff --git a/diffs/diff_20250723_150405_2b2679e.patch b/diffs/diff_20250723_150405_2b2679e.patch
++++new file mode 100644
++++index 0000000..9c5056d
++++--- /dev/null
+++++++ b/diffs/diff_20250723_150405_2b2679e.patch
++++@@ -0,0 +1,54 @@
+++++﻿# Diff Summary
+++++# Generated on: 07/23/2025 15:04:05
+++++# Branch: main
+++++# From commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
+++++# To commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
+++++# Files changed:
+++++#   diffs/commit_diff_20250723_150323_47a11e4.patch
+++++
+++++diff --git a/diffs/commit_diff_20250723_150323_47a11e4.patch b/diffs/commit_diff_20250723_150323_47a11e4.patch
+++++new file mode 100644
+++++index 0000000..020092e
+++++--- /dev/null
++++++++ b/diffs/commit_diff_20250723_150323_47a11e4.patch
+++++@@ -0,0 +1,39 @@
++++++﻿# Commit Diff Summary
++++++# Generated on: 07/23/2025 15:03:23
++++++# Branch: main
++++++# Commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
++++++# Previous: 5a5bcd6e160167f5b51c174ec63c1678eafd9d59
++++++# Message: Test post-commit hook - Update README with enhanced features
++++++# Files changed:
++++++#   README.md
++++++
++++++diff --git a/README.md b/README.md
++++++index ff8abe0..e15204a 100644
++++++--- a/README.md
+++++++++ b/README.md
++++++@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
++++++ 
++++++ ## Getting Started
++++++ 
++++++-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
+++++++This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
+++++++
+++++++## Features
+++++++
+++++++- **Automatic Diff Generation**: Creates diff files for every commit and push
+++++++- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
+++++++- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
+++++++- **Complete History**: Maintains a permanent record of all changes
++++++ 
++++++ ## Installation
++++++ 
++++++@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
++++++ 
++++++ ## Diff System
++++++ 
++++++-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+++++++This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
++++++ 
++++++ ## Contributing
++++++ 
++++++
+++++
++++
+++diff --git a/diffs/commit_diff_20250723_151515_a5c3347.patch b/diffs/commit_diff_20250723_151515_a5c3347.patch
+++new file mode 100644
+++index 0000000..4e54631
+++--- /dev/null
++++++ b/diffs/commit_diff_20250723_151515_a5c3347.patch
+++@@ -0,0 +1,698 @@
++++﻿# Commit Diff Summary
++++# Generated on: 07/23/2025 15:15:15
++++# Branch: main
++++# Commit: a5c3347fdc6d43934f188db26423f25d4e45d867
++++# Previous: 77fbb03b1a89a0bfae3ba5f2f6f6456df254c975
++++# Message: Create TrendTiers Astro affiliate website structure
++++# Files changed:
++++#   # TrendTiers.md
++++#   astro.config.mjs
++++#   diffs/commit_diff_20250723_150354_2b2679e.patch
++++#   diffs/commit_diff_20250723_150409_77fbb03.patch
++++#   package.json
++++#   src/components/TierList.astro
++++#   src/content/tierlists/best-gaming-headsets-2025.mdx
++++#   src/layouts/Layout.astro
++++#   src/types.ts
++++#   src/utils/affiliates.json
++++#   tailwind.config.mjs
++++
++++diff --git a/# TrendTiers.md b/# TrendTiers.md
++++new file mode 100644
++++index 0000000..6874f51
++++--- /dev/null
+++++++ b/# TrendTiers.md	
++++@@ -0,0 +1,96 @@
+++++# TrendTiers.com – Copilot Reference
+++++
+++++## 📘 Purpose
+++++TrendTiers.com is a fully static, SEO-optimized affiliate website that publishes tier list–style product recommendation articles. Each page is auto-generated using LLMs and features:
+++++- Tiered rankings (S, A, B, etc.)
+++++- Short reviews and justifications per product
+++++- Affiliate links
+++++- Stock images
+++++- SEO metadata
+++++
+++++## 🧱 Tech Stack
+++++- Astro (static site generator)
+++++- MDX content files (1 per tier list)
+++++- Minimal JavaScript
+++++- GitHub + Vercel for CI/CD
+++++- GitHub Copilot for assisted development
+++++- No backend or database
+++++
+++++## 📁 Folder Structure
+++++
+++++/src
+++++/components → TierList and utility UI
+++++/content/tierlists → AI-generated MDX articles
+++++/pages → Home and dynamic routes
+++++/layouts → Site layout
+++++/scripts → Generation scripts (AI, scraping, etc.)
+++++/public/images → Product images
+++++/utils/affiliates.json → Master list of affiliate URLs
+++++
+++++
+++++## 📄 MDX File Format (Tier List)
+++++Each article lives at `/src/content/tierlists/{slug}.mdx` and uses:
+++++```mdx
+++++---
+++++title: Best X in YYYY
+++++description: SEO meta description
+++++pubDate: 2025-07-23
+++++slug: best-x-in-yyyy
+++++image: /images/example.jpg
+++++tags: [tag1, tag2]
+++++---
+++++
+++++import TierList from '../../components/TierList.astro'
+++++
+++++<TierList
+++++  tiers={{
+++++    "S": [
+++++      { name: "Product A", review: "Excellent for X", link: "https://amzn.to/..." }
+++++    ],
+++++    "A": [
+++++      { name: "Product B", review: "Budget option", link: "https://amzn.to/..." }
+++++    ]
+++++  }}
+++++/>
+++++
+++++💡 Components Overview
+++++TierList.astro
+++++
+++++Renders each tier (S, A, B...) as a section with the product's name, review, and affiliate link.
+++++AffiliateButton.astro (optional)
+++++
+++++Reusable button with cloaked or dynamic URL via utils/affiliates.json.
+++++🌐 SEO
+++++
+++++Every page should:
+++++
+++++    Include Open Graph and Twitter metadata in <head>
+++++
+++++    Inject JSON-LD using schema.org (type: ItemList)
+++++
+++++    Have a canonical URL
+++++
+++++🧠 Copilot Behavior
+++++
+++++    Generate content-first components
+++++
+++++    Use Astro props and Astro.glob/getCollection for dynamic content
+++++
+++++    Avoid React/JSX unless explicitly used in components
+++++
+++++    Assume each page is static and should render without JS
+++++
+++++🛠 Planned Scripts
+++++
+++++    generate-tier.js: Uses LLM API to generate an MDX tier list article
+++++
+++++    find-trends.js: Crawls Reddit/Exploding Topics/Google Trends
+++++
+++++    GitHub Actions to run the above and deploy to Vercel
+++++
+++++
+++++---
+++++
+++++Once that’s added to the project root, send me a quick "📌 Reference added" and I’ll give you the first Copilot prompt in the correct order. I’ll wait for each diff before moving forward.
+++++
+++++Ready?
++++\ No newline at end of file
++++diff --git a/astro.config.mjs b/astro.config.mjs
++++new file mode 100644
++++index 0000000..038f942
++++--- /dev/null
+++++++ b/astro.config.mjs
++++@@ -0,0 +1,16 @@
+++++import { defineConfig } from 'astro/config';
+++++import mdx from '@astrojs/mdx';
+++++import tailwind from '@astrojs/tailwind';
+++++
+++++// https://astro.build/config
+++++export default defineConfig({
+++++  integrations: [
+++++    mdx(),
+++++    tailwind()
+++++  ],
+++++  site: 'https://trendtiers.com',
+++++  output: 'static',
+++++  build: {
+++++    format: 'directory'
+++++  }
+++++});
++++diff --git a/diffs/commit_diff_20250723_150354_2b2679e.patch b/diffs/commit_diff_20250723_150354_2b2679e.patch
++++new file mode 100644
++++index 0000000..1b63975
++++--- /dev/null
+++++++ b/diffs/commit_diff_20250723_150354_2b2679e.patch
++++@@ -0,0 +1,55 @@
+++++﻿# Commit Diff Summary
+++++# Generated on: 07/23/2025 15:03:54
+++++# Branch: main
+++++# Commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
+++++# Previous: 47a11e46126cc2dac19c6f26d4994749f0874c61
+++++# Message: Add post-commit diff file for README update
+++++# Files changed:
+++++#   diffs/commit_diff_20250723_150323_47a11e4.patch
+++++
+++++diff --git a/diffs/commit_diff_20250723_150323_47a11e4.patch b/diffs/commit_diff_20250723_150323_47a11e4.patch
+++++new file mode 100644
+++++index 0000000..020092e
+++++--- /dev/null
++++++++ b/diffs/commit_diff_20250723_150323_47a11e4.patch
+++++@@ -0,0 +1,39 @@
++++++﻿# Commit Diff Summary
++++++# Generated on: 07/23/2025 15:03:23
++++++# Branch: main
++++++# Commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
++++++# Previous: 5a5bcd6e160167f5b51c174ec63c1678eafd9d59
++++++# Message: Test post-commit hook - Update README with enhanced features
++++++# Files changed:
++++++#   README.md
++++++
++++++diff --git a/README.md b/README.md
++++++index ff8abe0..e15204a 100644
++++++--- a/README.md
+++++++++ b/README.md
++++++@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
++++++ 
++++++ ## Getting Started
++++++ 
++++++-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
+++++++This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
+++++++
+++++++## Features
+++++++
+++++++- **Automatic Diff Generation**: Creates diff files for every commit and push
+++++++- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
+++++++- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
+++++++- **Complete History**: Maintains a permanent record of all changes
++++++ 
++++++ ## Installation
++++++ 
++++++@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
++++++ 
++++++ ## Diff System
++++++ 
++++++-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+++++++This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
++++++ 
++++++ ## Contributing
++++++ 
++++++
+++++
++++diff --git a/diffs/commit_diff_20250723_150409_77fbb03.patch b/diffs/commit_diff_20250723_150409_77fbb03.patch
++++new file mode 100644
++++index 0000000..c6087bf
++++--- /dev/null
+++++++ b/diffs/commit_diff_20250723_150409_77fbb03.patch
++++@@ -0,0 +1,70 @@
+++++﻿# Commit Diff Summary
+++++# Generated on: 07/23/2025 15:04:09
+++++# Branch: main
+++++# Commit: 77fbb03b1a89a0bfae3ba5f2f6f6456df254c975
+++++# Previous: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
+++++# Message: Add diff file: diffs/diff_20250723_150405_2b2679e.patch
+++++# Files changed:
+++++#   diffs/diff_20250723_150405_2b2679e.patch
+++++
+++++diff --git a/diffs/diff_20250723_150405_2b2679e.patch b/diffs/diff_20250723_150405_2b2679e.patch
+++++new file mode 100644
+++++index 0000000..9c5056d
+++++--- /dev/null
++++++++ b/diffs/diff_20250723_150405_2b2679e.patch
+++++@@ -0,0 +1,54 @@
++++++﻿# Diff Summary
++++++# Generated on: 07/23/2025 15:04:05
++++++# Branch: main
++++++# From commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
++++++# To commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
++++++# Files changed:
++++++#   diffs/commit_diff_20250723_150323_47a11e4.patch
++++++
++++++diff --git a/diffs/commit_diff_20250723_150323_47a11e4.patch b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++++new file mode 100644
++++++index 0000000..020092e
++++++--- /dev/null
+++++++++ b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++++@@ -0,0 +1,39 @@
+++++++﻿# Commit Diff Summary
+++++++# Generated on: 07/23/2025 15:03:23
+++++++# Branch: main
+++++++# Commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
+++++++# Previous: 5a5bcd6e160167f5b51c174ec63c1678eafd9d59
+++++++# Message: Test post-commit hook - Update README with enhanced features
+++++++# Files changed:
+++++++#   README.md
+++++++
+++++++diff --git a/README.md b/README.md
+++++++index ff8abe0..e15204a 100644
+++++++--- a/README.md
++++++++++ b/README.md
+++++++@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
+++++++ 
+++++++ ## Getting Started
+++++++ 
+++++++-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
++++++++This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
++++++++
++++++++## Features
++++++++
++++++++- **Automatic Diff Generation**: Creates diff files for every commit and push
++++++++- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
++++++++- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
++++++++- **Complete History**: Maintains a permanent record of all changes
+++++++ 
+++++++ ## Installation
+++++++ 
+++++++@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
+++++++ 
+++++++ ## Diff System
+++++++ 
+++++++-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
++++++++This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+++++++ 
+++++++ ## Contributing
+++++++ 
+++++++
++++++
+++++
++++diff --git a/package.json b/package.json
++++new file mode 100644
++++index 0000000..913d7cb
++++--- /dev/null
+++++++ b/package.json
++++@@ -0,0 +1,21 @@
+++++{
+++++  "name": "trendtiers-affiliate-web",
+++++  "type": "module",
+++++  "version": "0.0.1",
+++++  "scripts": {
+++++    "dev": "astro dev",
+++++    "start": "astro dev",
+++++    "build": "astro build",
+++++    "preview": "astro preview",
+++++    "astro": "astro"
+++++  },
+++++  "dependencies": {
+++++    "astro": "^4.0.0",
+++++    "@astrojs/mdx": "^2.0.0",
+++++    "@astrojs/tailwind": "^5.0.0",
+++++    "tailwindcss": "^3.0.0"
+++++  },
+++++  "devDependencies": {
+++++    "@types/node": "^20.0.0"
+++++  }
+++++}
++++diff --git a/src/components/TierList.astro b/src/components/TierList.astro
++++new file mode 100644
++++index 0000000..6658d86
++++--- /dev/null
+++++++ b/src/components/TierList.astro
++++@@ -0,0 +1,83 @@
+++++---
+++++// TierList.astro - Component for displaying tiered product recommendations
+++++export interface Props {
+++++  tiers: {
+++++    [key: string]: Array<{
+++++      name: string;
+++++      review: string;
+++++      link: string;
+++++    }>;
+++++  };
+++++}
+++++
+++++const { tiers } = Astro.props;
+++++
+++++// Define tier order to ensure consistent display
+++++const tierOrder = ['S', 'A', 'B', 'C', 'D', 'F'];
+++++
+++++// Get only the tiers that exist in the data, in the correct order
+++++const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length > 0);
+++++---
+++++
+++++<div class="tier-list">
+++++  {sortedTiers.map((tierKey) => (
+++++    <section class="tier-section mb-6">
+++++      <h2 class="tier-heading text-xl font-bold mb-4 bg-gray-100 p-4 rounded">
+++++        Tier {tierKey}
+++++      </h2>
+++++      
+++++      <div class="products-grid">
+++++        {tiers[tierKey].map((product) => (
+++++          <div class="product-card bg-white border border-gray-200 p-4 rounded mb-4 shadow-sm">
+++++            <h3 class="product-name text-lg font-semibold mb-2">
+++++              {product.name}
+++++            </h3>
+++++            
+++++            <p class="product-review text-gray-700 mb-3">
+++++              {product.review}
+++++            </p>
+++++            
+++++            <a 
+++++              href={product.link}
+++++              class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+++++              rel="sponsored"
+++++              target="_blank"
+++++            >
+++++              Buy Now
+++++            </a>
+++++          </div>
+++++        ))}
+++++      </div>
+++++    </section>
+++++  ))}
+++++</div>
+++++
+++++<style>
+++++  .tier-list {
+++++    max-width: 800px;
+++++    margin: 0 auto;
+++++  }
+++++  
+++++  .tier-heading {
+++++    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+++++    border-left: 4px solid #3b82f6;
+++++  }
+++++  
+++++  .product-card {
+++++    transition: transform 0.2s ease, box-shadow 0.2s ease;
+++++  }
+++++  
+++++  .product-card:hover {
+++++    transform: translateY(-2px);
+++++    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+++++  }
+++++  
+++++  .buy-now-button {
+++++    text-decoration: none;
+++++    font-weight: 500;
+++++  }
+++++  
+++++  .buy-now-button:hover {
+++++    text-decoration: none;
+++++  }
+++++</style>
++++diff --git a/src/content/tierlists/best-gaming-headsets-2025.mdx b/src/content/tierlists/best-gaming-headsets-2025.mdx
++++new file mode 100644
++++index 0000000..d880e63
++++--- /dev/null
+++++++ b/src/content/tierlists/best-gaming-headsets-2025.mdx
++++@@ -0,0 +1,88 @@
+++++---
+++++title: Best Gaming Headsets 2025
+++++description: Complete tier list ranking of the best gaming headsets for competitive gaming, streaming, and casual play
+++++pubDate: 2025-07-23
+++++slug: best-gaming-headsets-2025
+++++image: /images/gaming-headsets.jpg
+++++tags: [gaming, headsets, audio, tech]
+++++---
+++++
+++++import TierList from '../../components/TierList.astro'
+++++
+++++# Best Gaming Headsets 2025 - Complete Tier List
+++++
+++++Looking for the perfect gaming headset? We've tested dozens of models and ranked them in our comprehensive tier list. From professional esports headsets to budget-friendly options, find your perfect audio companion.
+++++
+++++<TierList
+++++  tiers={{
+++++    "S": [
+++++      { 
+++++        name: "SteelSeries Arctis Pro Wireless", 
+++++        review: "Premium wireless with exceptional audio quality and comfort for long gaming sessions. Dual battery system ensures uninterrupted gameplay.", 
+++++        link: "https://amzn.to/arctis-pro-wireless" 
+++++      },
+++++      { 
+++++        name: "Audeze Maxwell", 
+++++        review: "Audiophile-grade planar magnetic drivers deliver unmatched sound quality. Perfect for both gaming and music production.", 
+++++        link: "https://amzn.to/audeze-maxwell" 
+++++      }
+++++    ],
+++++    "A": [
+++++      { 
+++++        name: "HyperX Cloud Alpha S", 
+++++        review: "Excellent build quality and clear microphone. Great value for competitive gaming with reliable 7.1 surround sound.", 
+++++        link: "https://amzn.to/hyperx-cloud-alpha-s" 
+++++      },
+++++      { 
+++++        name: "Corsair HS80 RGB Wireless", 
+++++        review: "Solid wireless performance with good battery life. RGB lighting and comfortable memory foam padding.", 
+++++        link: "https://amzn.to/corsair-hs80-wireless" 
+++++      },
+++++      { 
+++++        name: "Razer BlackShark V2 Pro", 
+++++        review: "Professional esports headset with THX Spatial Audio. Lightweight design perfect for tournament play.", 
+++++        link: "https://amzn.to/razer-blackshark-v2-pro" 
+++++      }
+++++    ],
+++++    "B": [
+++++      { 
+++++        name: "Logitech G733 Lightspeed", 
+++++        review: "Fun RGB lighting and decent wireless performance. Good for casual gaming but lacks premium audio quality.", 
+++++        link: "https://amzn.to/logitech-g733" 
+++++      },
+++++      { 
+++++        name: "Turtle Beach Stealth 600", 
+++++        review: "Budget-friendly wireless option with decent sound. Good entry point for console gamers.", 
+++++        link: "https://amzn.to/turtle-beach-stealth-600" 
+++++      }
+++++    ],
+++++    "C": [
+++++      { 
+++++        name: "ASUS TUF Gaming H3", 
+++++        review: "Basic wired headset with okay build quality. Suitable for occasional gaming but nothing special.", 
+++++        link: "https://amzn.to/asus-tuf-h3" 
+++++      }
+++++    ]
+++++  }}
+++++/>
+++++
+++++## What Makes a Great Gaming Headset?
+++++
+++++When choosing a gaming headset, consider these key factors:
+++++
+++++- **Audio Quality**: Clear highs and deep bass for immersive gameplay
+++++- **Microphone**: Crystal clear communication with noise cancellation
+++++- **Comfort**: Lightweight design with soft padding for long sessions
+++++- **Compatibility**: Works across all your gaming platforms
+++++- **Wireless vs Wired**: Consider latency and battery life needs
+++++
+++++## Frequently Asked Questions
+++++
+++++**Q: Are wireless gaming headsets worth it?**
+++++A: Modern wireless headsets have virtually eliminated latency issues. If you value freedom of movement, go wireless.
+++++
+++++**Q: What's the difference between stereo and surround sound?**
+++++A: Surround sound helps with directional audio in competitive games, while stereo often provides better music quality.
+++++
+++++**Q: How important is the microphone quality?**
+++++A: Essential for team communication. Look for noise cancellation and flip-to-mute features.
++++diff --git a/src/layouts/Layout.astro b/src/layouts/Layout.astro
++++new file mode 100644
++++index 0000000..dfba5ec
++++--- /dev/null
+++++++ b/src/layouts/Layout.astro
++++@@ -0,0 +1,94 @@
+++++---
+++++export interface Props {
+++++  title: string;
+++++  description?: string;
+++++  image?: string;
+++++  pubDate?: Date;
+++++}
+++++
+++++const { title, description, image, pubDate } = Astro.props;
+++++const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+++++---
+++++
+++++<!DOCTYPE html>
+++++<html lang="en">
+++++  <head>
+++++    <meta charset="UTF-8" />
+++++    <meta name="description" content={description || "TrendTiers - The best product tier lists and recommendations"} />
+++++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+++++    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+++++    <meta name="generator" content={Astro.generator} />
+++++    
+++++    <!-- Canonical URL -->
+++++    <link rel="canonical" href={canonicalURL} />
+++++    
+++++    <!-- Primary Meta Tags -->
+++++    <title>{title} | TrendTiers</title>
+++++    <meta name="title" content={`${title} | TrendTiers`} />
+++++    <meta name="description" content={description} />
+++++    
+++++    <!-- Open Graph / Facebook -->
+++++    <meta property="og:type" content="website" />
+++++    <meta property="og:url" content={canonicalURL} />
+++++    <meta property="og:title" content={`${title} | TrendTiers`} />
+++++    <meta property="og:description" content={description} />
+++++    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+++++    
+++++    <!-- Twitter -->
+++++    <meta property="twitter:card" content="summary_large_image" />
+++++    <meta property="twitter:url" content={canonicalURL} />
+++++    <meta property="twitter:title" content={`${title} | TrendTiers`} />
+++++    <meta property="twitter:description" content={description} />
+++++    {image && <meta property="twitter:image" content={new URL(image, Astro.site)} />}
+++++    
+++++    <!-- JSON-LD Schema -->
+++++    {pubDate && (
+++++      <script type="application/ld+json" set:html={JSON.stringify({
+++++        "@context": "https://schema.org",
+++++        "@type": "ItemList",
+++++        "name": title,
+++++        "description": description,
+++++        "url": canonicalURL.toString(),
+++++        "datePublished": pubDate.toISOString(),
+++++        "publisher": {
+++++          "@type": "Organization",
+++++          "name": "TrendTiers",
+++++          "url": "https://trendtiers.com"
+++++        }
+++++      })} />
+++++    )}
+++++  </head>
+++++  <body class="bg-gray-50 text-gray-900">
+++++    <header class="bg-white shadow-sm border-b">
+++++      <nav class="max-w-6xl mx-auto px-4 py-4">
+++++        <div class="flex items-center justify-between">
+++++          <a href="/" class="text-2xl font-bold text-blue-600">
+++++            TrendTiers
+++++          </a>
+++++          <div class="hidden md:flex space-x-6">
+++++            <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
+++++            <a href="/categories" class="text-gray-600 hover:text-blue-600 transition-colors">Categories</a>
+++++            <a href="/about" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
+++++          </div>
+++++        </div>
+++++      </nav>
+++++    </header>
+++++    
+++++    <main class="max-w-4xl mx-auto px-4 py-8">
+++++      <slot />
+++++    </main>
+++++    
+++++    <footer class="bg-gray-100 border-t mt-16">
+++++      <div class="max-w-6xl mx-auto px-4 py-8">
+++++        <div class="text-center text-gray-600">
+++++          <p>&copy; 2025 TrendTiers. All rights reserved.</p>
+++++          <p class="mt-2 text-sm">
+++++            <a href="/privacy" class="hover:text-blue-600">Privacy Policy</a> |
+++++            <a href="/terms" class="hover:text-blue-600 ml-2">Terms of Service</a> |
+++++            <a href="/affiliate-disclosure" class="hover:text-blue-600 ml-2">Affiliate Disclosure</a>
+++++          </p>
+++++        </div>
+++++      </div>
+++++    </footer>
+++++  </body>
+++++</html>
++++diff --git a/src/types.ts b/src/types.ts
++++new file mode 100644
++++index 0000000..18fdef8
++++--- /dev/null
+++++++ b/src/types.ts
++++@@ -0,0 +1,41 @@
+++++// Type definitions for TrendTiers affiliate website
+++++
+++++export interface Product {
+++++  name: string;
+++++  review: string;
+++++  link: string;
+++++  price?: string;
+++++  image?: string;
+++++}
+++++
+++++export interface TierData {
+++++  [tierKey: string]: Product[];
+++++}
+++++
+++++export interface TierListProps {
+++++  tiers: TierData;
+++++}
+++++
+++++export interface ArticleFrontmatter {
+++++  title: string;
+++++  description: string;
+++++  pubDate: Date;
+++++  slug: string;
+++++  image?: string;
+++++  tags: string[];
+++++}
+++++
+++++export interface AffiliateConfig {
+++++  [provider: string]: {
+++++    baseUrl: string;
+++++    trackingId: string;
+++++  };
+++++}
+++++
+++++export interface ProductLinks {
+++++  [productId: string]: {
+++++    [provider: string]: string;
+++++  } & {
+++++    price?: string;
+++++  };
+++++}
++++diff --git a/src/utils/affiliates.json b/src/utils/affiliates.json
++++new file mode 100644
++++index 0000000..f022fb6
++++--- /dev/null
+++++++ b/src/utils/affiliates.json
++++@@ -0,0 +1,30 @@
+++++{
+++++  "amazon": {
+++++    "baseUrl": "https://amzn.to/",
+++++    "trackingId": "trendtiers-20"
+++++  },
+++++  "bestbuy": {
+++++    "baseUrl": "https://bestbuy.7tiv.net/c/",
+++++    "trackingId": "123456"
+++++  },
+++++  "newegg": {
+++++    "baseUrl": "https://click.linksynergy.com/deeplink?",
+++++    "trackingId": "newegg-affiliate-id"
+++++  },
+++++  "products": {
+++++    "arctis-pro-wireless": {
+++++      "amazon": "https://amzn.to/3XYZ123",
+++++      "bestbuy": "https://bestbuy.7tiv.net/c/123456/product-id",
+++++      "price": "$329.99"
+++++    },
+++++    "audeze-maxwell": {
+++++      "amazon": "https://amzn.to/3ABC456",
+++++      "price": "$399.99"
+++++    },
+++++    "hyperx-cloud-alpha-s": {
+++++      "amazon": "https://amzn.to/3DEF789",
+++++      "bestbuy": "https://bestbuy.7tiv.net/c/123456/hyperx-alpha",
+++++      "price": "$129.99"
+++++    }
+++++  }
+++++}
++++diff --git a/tailwind.config.mjs b/tailwind.config.mjs
++++new file mode 100644
++++index 0000000..d88a743
++++--- /dev/null
+++++++ b/tailwind.config.mjs
++++@@ -0,0 +1,17 @@
+++++/** @type {import('tailwindcss').Config} */
+++++export default {
+++++  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+++++  theme: {
+++++    extend: {
+++++      colors: {
+++++        'tier-s': '#ff6b6b',
+++++        'tier-a': '#4ecdc4',
+++++        'tier-b': '#45b7d1',
+++++        'tier-c': '#96ceb4',
+++++        'tier-d': '#ffeaa7',
+++++        'tier-f': '#ddd6fe'
+++++      }
+++++    },
+++++  },
+++++  plugins: [],
+++++}
++++
+++diff --git a/diffs/diff_20250723_150405_2b2679e.patch b/diffs/diff_20250723_150405_2b2679e.patch
+++new file mode 100644
+++index 0000000..9c5056d
+++--- /dev/null
++++++ b/diffs/diff_20250723_150405_2b2679e.patch
+++@@ -0,0 +1,54 @@
++++﻿# Diff Summary
++++# Generated on: 07/23/2025 15:04:05
++++# Branch: main
++++# From commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
++++# To commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
++++# Files changed:
++++#   diffs/commit_diff_20250723_150323_47a11e4.patch
++++
++++diff --git a/diffs/commit_diff_20250723_150323_47a11e4.patch b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++new file mode 100644
++++index 0000000..020092e
++++--- /dev/null
+++++++ b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++@@ -0,0 +1,39 @@
+++++﻿# Commit Diff Summary
+++++# Generated on: 07/23/2025 15:03:23
+++++# Branch: main
+++++# Commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
+++++# Previous: 5a5bcd6e160167f5b51c174ec63c1678eafd9d59
+++++# Message: Test post-commit hook - Update README with enhanced features
+++++# Files changed:
+++++#   README.md
+++++
+++++diff --git a/README.md b/README.md
+++++index ff8abe0..e15204a 100644
+++++--- a/README.md
++++++++ b/README.md
+++++@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
+++++ 
+++++ ## Getting Started
+++++ 
+++++-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
++++++This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
++++++
++++++## Features
++++++
++++++- **Automatic Diff Generation**: Creates diff files for every commit and push
++++++- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
++++++- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
++++++- **Complete History**: Maintains a permanent record of all changes
+++++ 
+++++ ## Installation
+++++ 
+++++@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
+++++ 
+++++ ## Diff System
+++++ 
+++++-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
++++++This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+++++ 
+++++ ## Contributing
+++++ 
+++++
++++
+++diff --git a/package.json b/package.json
+++new file mode 100644
+++index 0000000..913d7cb
+++--- /dev/null
++++++ b/package.json
+++@@ -0,0 +1,21 @@
++++{
++++  "name": "trendtiers-affiliate-web",
++++  "type": "module",
++++  "version": "0.0.1",
++++  "scripts": {
++++    "dev": "astro dev",
++++    "start": "astro dev",
++++    "build": "astro build",
++++    "preview": "astro preview",
++++    "astro": "astro"
++++  },
++++  "dependencies": {
++++    "astro": "^4.0.0",
++++    "@astrojs/mdx": "^2.0.0",
++++    "@astrojs/tailwind": "^5.0.0",
++++    "tailwindcss": "^3.0.0"
++++  },
++++  "devDependencies": {
++++    "@types/node": "^20.0.0"
++++  }
++++}
+++diff --git a/src/components/AffiliateButton.astro b/src/components/AffiliateButton.astro
+++new file mode 100644
+++index 0000000..0b1b34c
+++--- /dev/null
++++++ b/src/components/AffiliateButton.astro
+++@@ -0,0 +1,61 @@
++++---
++++// AffiliateButton.astro - Reusable affiliate button component
++++export interface Props {
++++  href: string;
++++  text?: string;
++++  variant?: 'primary' | 'secondary' | 'outline';
++++  size?: 'sm' | 'md' | 'lg';
++++  class?: string;
++++}
++++
++++const { 
++++  href, 
++++  text = 'Buy Now', 
++++  variant = 'primary', 
++++  size = 'md',
++++  class: className = '' 
++++} = Astro.props;
++++
++++// Base classes
++++const baseClasses = 'inline-flex items-center justify-center font-medium rounded transition-all duration-200 no-underline';
++++
++++// Size classes
++++const sizeClasses = {
++++  sm: 'px-3 py-1.5 text-sm',
++++  md: 'px-4 py-2 text-base',
++++  lg: 'px-6 py-3 text-lg'
++++};
++++
++++// Variant classes
++++const variantClasses = {
++++  primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-200',
++++  secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-200',
++++  outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white focus:ring-4 focus:ring-blue-200'
++++};
++++
++++const buttonClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
++++---
++++
++++<a 
++++  href={href}
++++  class={buttonClasses}
++++  rel="sponsored"
++++  target="_blank"
++++  aria-label={`${text} - Opens in new tab`}
++++>
++++  <span>{text}</span>
++++  <svg 
++++    class="ml-2 w-4 h-4" 
++++    fill="none" 
++++    stroke="currentColor" 
++++    viewBox="0 0 24 24"
++++    aria-hidden="true"
++++  >
++++    <path 
++++      stroke-linecap="round" 
++++      stroke-linejoin="round" 
++++      stroke-width="2" 
++++      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
++++    />
++++  </svg>
++++</a>
+++diff --git a/src/components/TierList.astro b/src/components/TierList.astro
+++new file mode 100644
+++index 0000000..6b91822
+++--- /dev/null
++++++ b/src/components/TierList.astro
+++@@ -0,0 +1,90 @@
++++---
++++// TierList.astro - Component for displaying tiered product recommendations
++++import AffiliateButton from './AffiliateButton.astro';
++++
++++export interface Props {
++++  tiers: {
++++    [key: string]: Array<{
++++      name: string;
++++      review: string;
++++      link: string;
++++    }>;
++++  };
++++  useButtons?: boolean;
++++}
++++
++++const { tiers, useButtons = false } = Astro.props;
++++
++++// Define tier order to ensure consistent display
++++const tierOrder = ['S', 'A', 'B', 'C', 'D', 'F'];
++++
++++// Get only the tiers that exist in the data, in the correct order
++++const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length > 0);
++++---
++++
++++<div class="tier-list">
++++  {sortedTiers.map((tierKey) => (
++++    <section class="tier-section mb-6">
++++      <h2 class="tier-heading text-xl font-bold mb-4 bg-gray-100 p-4 rounded">
++++        Tier {tierKey}
++++      </h2>
++++      
++++      <div class="products-grid">
++++        {tiers[tierKey].map((product) => (
++++          <div class="product-card bg-white border border-gray-200 p-4 rounded mb-4 shadow-sm">
++++            <h3 class="product-name text-lg font-semibold mb-2">
++++              {product.name}
++++            </h3>
++++            
++++            <p class="product-review text-gray-700 mb-3">
++++              {product.review}
++++            </p>
++++            
++++            {useButtons ? (
++++              <AffiliateButton href={product.link} />
++++            ) : (
++++              <a 
++++                href={product.link}
++++                class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
++++                rel="sponsored"
++++                target="_blank"
++++              >
++++                Buy Now
++++              </a>
++++            )}
++++          </div>
++++        ))}
++++      </div>
++++    </section>
++++  ))}
++++</div>
++++
++++<style>
++++  .tier-list {
++++    max-width: 800px;
++++    margin: 0 auto;
++++  }
++++  
++++  .tier-heading {
++++    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
++++    border-left: 4px solid #3b82f6;
++++  }
++++  
++++  .product-card {
++++    transition: transform 0.2s ease, box-shadow 0.2s ease;
++++  }
++++  
++++  .product-card:hover {
++++    transform: translateY(-2px);
++++    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
++++  }
++++  
++++  .buy-now-button {
++++    text-decoration: none;
++++    font-weight: 500;
++++  }
++++  
++++  .buy-now-button:hover {
++++    text-decoration: none;
++++  }
++++</style>
+++diff --git a/src/content/tierlists/best-gaming-headsets-2025.mdx b/src/content/tierlists/best-gaming-headsets-2025.mdx
+++new file mode 100644
+++index 0000000..d880e63
+++--- /dev/null
++++++ b/src/content/tierlists/best-gaming-headsets-2025.mdx
+++@@ -0,0 +1,88 @@
++++---
++++title: Best Gaming Headsets 2025
++++description: Complete tier list ranking of the best gaming headsets for competitive gaming, streaming, and casual play
++++pubDate: 2025-07-23
++++slug: best-gaming-headsets-2025
++++image: /images/gaming-headsets.jpg
++++tags: [gaming, headsets, audio, tech]
++++---
++++
++++import TierList from '../../components/TierList.astro'
++++
++++# Best Gaming Headsets 2025 - Complete Tier List
++++
++++Looking for the perfect gaming headset? We've tested dozens of models and ranked them in our comprehensive tier list. From professional esports headsets to budget-friendly options, find your perfect audio companion.
++++
++++<TierList
++++  tiers={{
++++    "S": [
++++      { 
++++        name: "SteelSeries Arctis Pro Wireless", 
++++        review: "Premium wireless with exceptional audio quality and comfort for long gaming sessions. Dual battery system ensures uninterrupted gameplay.", 
++++        link: "https://amzn.to/arctis-pro-wireless" 
++++      },
++++      { 
++++        name: "Audeze Maxwell", 
++++        review: "Audiophile-grade planar magnetic drivers deliver unmatched sound quality. Perfect for both gaming and music production.", 
++++        link: "https://amzn.to/audeze-maxwell" 
++++      }
++++    ],
++++    "A": [
++++      { 
++++        name: "HyperX Cloud Alpha S", 
++++        review: "Excellent build quality and clear microphone. Great value for competitive gaming with reliable 7.1 surround sound.", 
++++        link: "https://amzn.to/hyperx-cloud-alpha-s" 
++++      },
++++      { 
++++        name: "Corsair HS80 RGB Wireless", 
++++        review: "Solid wireless performance with good battery life. RGB lighting and comfortable memory foam padding.", 
++++        link: "https://amzn.to/corsair-hs80-wireless" 
++++      },
++++      { 
++++        name: "Razer BlackShark V2 Pro", 
++++        review: "Professional esports headset with THX Spatial Audio. Lightweight design perfect for tournament play.", 
++++        link: "https://amzn.to/razer-blackshark-v2-pro" 
++++      }
++++    ],
++++    "B": [
++++      { 
++++        name: "Logitech G733 Lightspeed", 
++++        review: "Fun RGB lighting and decent wireless performance. Good for casual gaming but lacks premium audio quality.", 
++++        link: "https://amzn.to/logitech-g733" 
++++      },
++++      { 
++++        name: "Turtle Beach Stealth 600", 
++++        review: "Budget-friendly wireless option with decent sound. Good entry point for console gamers.", 
++++        link: "https://amzn.to/turtle-beach-stealth-600" 
++++      }
++++    ],
++++    "C": [
++++      { 
++++        name: "ASUS TUF Gaming H3", 
++++        review: "Basic wired headset with okay build quality. Suitable for occasional gaming but nothing special.", 
++++        link: "https://amzn.to/asus-tuf-h3" 
++++      }
++++    ]
++++  }}
++++/>
++++
++++## What Makes a Great Gaming Headset?
++++
++++When choosing a gaming headset, consider these key factors:
++++
++++- **Audio Quality**: Clear highs and deep bass for immersive gameplay
++++- **Microphone**: Crystal clear communication with noise cancellation
++++- **Comfort**: Lightweight design with soft padding for long sessions
++++- **Compatibility**: Works across all your gaming platforms
++++- **Wireless vs Wired**: Consider latency and battery life needs
++++
++++## Frequently Asked Questions
++++
++++**Q: Are wireless gaming headsets worth it?**
++++A: Modern wireless headsets have virtually eliminated latency issues. If you value freedom of movement, go wireless.
++++
++++**Q: What's the difference between stereo and surround sound?**
++++A: Surround sound helps with directional audio in competitive games, while stereo often provides better music quality.
++++
++++**Q: How important is the microphone quality?**
++++A: Essential for team communication. Look for noise cancellation and flip-to-mute features.
+++diff --git a/src/layouts/Layout.astro b/src/layouts/Layout.astro
+++new file mode 100644
+++index 0000000..dfba5ec
+++--- /dev/null
++++++ b/src/layouts/Layout.astro
+++@@ -0,0 +1,94 @@
++++---
++++export interface Props {
++++  title: string;
++++  description?: string;
++++  image?: string;
++++  pubDate?: Date;
++++}
++++
++++const { title, description, image, pubDate } = Astro.props;
++++const canonicalURL = new URL(Astro.url.pathname, Astro.site);
++++---
++++
++++<!DOCTYPE html>
++++<html lang="en">
++++  <head>
++++    <meta charset="UTF-8" />
++++    <meta name="description" content={description || "TrendTiers - The best product tier lists and recommendations"} />
++++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++++    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
++++    <meta name="generator" content={Astro.generator} />
++++    
++++    <!-- Canonical URL -->
++++    <link rel="canonical" href={canonicalURL} />
++++    
++++    <!-- Primary Meta Tags -->
++++    <title>{title} | TrendTiers</title>
++++    <meta name="title" content={`${title} | TrendTiers`} />
++++    <meta name="description" content={description} />
++++    
++++    <!-- Open Graph / Facebook -->
++++    <meta property="og:type" content="website" />
++++    <meta property="og:url" content={canonicalURL} />
++++    <meta property="og:title" content={`${title} | TrendTiers`} />
++++    <meta property="og:description" content={description} />
++++    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
++++    
++++    <!-- Twitter -->
++++    <meta property="twitter:card" content="summary_large_image" />
++++    <meta property="twitter:url" content={canonicalURL} />
++++    <meta property="twitter:title" content={`${title} | TrendTiers`} />
++++    <meta property="twitter:description" content={description} />
++++    {image && <meta property="twitter:image" content={new URL(image, Astro.site)} />}
++++    
++++    <!-- JSON-LD Schema -->
++++    {pubDate && (
++++      <script type="application/ld+json" set:html={JSON.stringify({
++++        "@context": "https://schema.org",
++++        "@type": "ItemList",
++++        "name": title,
++++        "description": description,
++++        "url": canonicalURL.toString(),
++++        "datePublished": pubDate.toISOString(),
++++        "publisher": {
++++          "@type": "Organization",
++++          "name": "TrendTiers",
++++          "url": "https://trendtiers.com"
++++        }
++++      })} />
++++    )}
++++  </head>
++++  <body class="bg-gray-50 text-gray-900">
++++    <header class="bg-white shadow-sm border-b">
++++      <nav class="max-w-6xl mx-auto px-4 py-4">
++++        <div class="flex items-center justify-between">
++++          <a href="/" class="text-2xl font-bold text-blue-600">
++++            TrendTiers
++++          </a>
++++          <div class="hidden md:flex space-x-6">
++++            <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
++++            <a href="/categories" class="text-gray-600 hover:text-blue-600 transition-colors">Categories</a>
++++            <a href="/about" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
++++          </div>
++++        </div>
++++      </nav>
++++    </header>
++++    
++++    <main class="max-w-4xl mx-auto px-4 py-8">
++++      <slot />
++++    </main>
++++    
++++    <footer class="bg-gray-100 border-t mt-16">
++++      <div class="max-w-6xl mx-auto px-4 py-8">
++++        <div class="text-center text-gray-600">
++++          <p>&copy; 2025 TrendTiers. All rights reserved.</p>
++++          <p class="mt-2 text-sm">
++++            <a href="/privacy" class="hover:text-blue-600">Privacy Policy</a> |
++++            <a href="/terms" class="hover:text-blue-600 ml-2">Terms of Service</a> |
++++            <a href="/affiliate-disclosure" class="hover:text-blue-600 ml-2">Affiliate Disclosure</a>
++++          </p>
++++        </div>
++++      </div>
++++    </footer>
++++  </body>
++++</html>
+++diff --git a/src/pages/demo.astro b/src/pages/demo.astro
+++new file mode 100644
+++index 0000000..a0b8e9e
+++--- /dev/null
++++++ b/src/pages/demo.astro
+++@@ -0,0 +1,61 @@
++++---
++++import Layout from '../layouts/Layout.astro';
++++import TierList from '../components/TierList.astro';
++++
++++const sampleTiers = {
++++  "S": [
++++    { 
++++      name: "Premium Product A", 
++++      review: "Exceptional quality and performance. Worth every penny for serious users.", 
++++      link: "https://amzn.to/premium-a" 
++++    }
++++  ],
++++  "A": [
++++    { 
++++      name: "Great Product B", 
++++      review: "Excellent value for money with solid performance across all metrics.", 
++++      link: "https://amzn.to/great-b" 
++++    },
++++    { 
++++      name: "Reliable Product C", 
++++      review: "Consistent performer with good build quality. Perfect for most users.", 
++++      link: "https://amzn.to/reliable-c" 
++++    }
++++  ],
++++  "B": [
++++    { 
++++      name: "Decent Product D", 
++++      review: "Good budget option with some compromises but still functional.", 
++++      link: "https://amzn.to/decent-d" 
++++    }
++++  ]
++++};
++++---
++++
++++<Layout 
++++  title="TierList Component Demo"
++++  description="Example demonstration of the TierList Astro component for affiliate product rankings"
++++>
++++  <div class="prose lg:prose-xl mx-auto">
++++    <h1 class="text-3xl font-bold mb-8">TierList Component Demo</h1>
++++    
++++    <p class="text-gray-600 mb-8">
++++      This page demonstrates the TierList Astro component in action. 
++++      Each tier displays products with their reviews and affiliate links.
++++    </p>
++++    
++++    <TierList tiers={sampleTiers} />
++++    
++++    <div class="mt-12 p-6 bg-blue-50 rounded-lg">
++++      <h2 class="text-xl font-semibold mb-4">Component Features:</h2>
++++      <ul class="list-disc pl-6 space-y-2">
++++        <li>Responsive design with Tailwind CSS</li>
++++        <li>Semantic HTML structure for SEO</li>
++++        <li>Proper affiliate link attributes (rel="sponsored", target="_blank")</li>
++++        <li>Hover effects and smooth transitions</li>
++++        <li>Flexible tier system (S, A, B, C, D, F)</li>
++++        <li>TypeScript support for type safety</li>
++++      </ul>
++++    </div>
++++  </div>
++++</Layout>
+++diff --git a/src/pages/index.astro b/src/pages/index.astro
+++new file mode 100644
+++index 0000000..256bfab
+++--- /dev/null
++++++ b/src/pages/index.astro
+++@@ -0,0 +1,69 @@
++++---
++++import Layout from '../layouts/Layout.astro';
++++---
++++
++++<Layout 
++++  title="TrendTiers - Best Product Rankings & Affiliate Reviews"
++++  description="Discover the best products through our comprehensive tier list rankings. Expert reviews and recommendations for gaming, tech, lifestyle, and more."
++++>
++++  <div class="text-center">
++++    <h1 class="text-4xl font-bold text-gray-900 mb-6">
++++      Welcome to TrendTiers
++++    </h1>
++++    
++++    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
++++      The ultimate destination for tier list product rankings. 
++++      We test, review, and rank the best products so you don't have to.
++++    </p>
++++    
++++    <div class="grid md:grid-cols-3 gap-8 mt-12">
++++      <div class="bg-white p-6 rounded-lg shadow-sm border">
++++        <h3 class="text-xl font-semibold mb-4">🎮 Gaming</h3>
++++        <p class="text-gray-600 mb-4">Headsets, keyboards, mice, and gaming accessories ranked by performance.</p>
++++        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
++++      </div>
++++      
++++      <div class="bg-white p-6 rounded-lg shadow-sm border">
++++        <h3 class="text-xl font-semibold mb-4">💻 Tech</h3>
++++        <p class="text-gray-600 mb-4">Laptops, phones, and gadgets tested for value and performance.</p>
++++        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
++++      </div>
++++      
++++      <div class="bg-white p-6 rounded-lg shadow-sm border">
++++        <h3 class="text-xl font-semibold mb-4">🏠 Lifestyle</h3>
++++        <p class="text-gray-600 mb-4">Home, fitness, and everyday products ranked for quality and value.</p>
++++        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
++++      </div>
++++    </div>
++++    
++++    <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl">
++++      <h2 class="text-2xl font-bold mb-4">How Our Tier Lists Work</h2>
++++      <div class="grid md:grid-cols-6 gap-4 text-center">
++++        <div class="bg-red-100 p-3 rounded-lg">
++++          <div class="font-bold text-red-700">S Tier</div>
++++          <div class="text-sm text-red-600">Best in class</div>
++++        </div>
++++        <div class="bg-green-100 p-3 rounded-lg">
++++          <div class="font-bold text-green-700">A Tier</div>
++++          <div class="text-sm text-green-600">Excellent</div>
++++        </div>
++++        <div class="bg-blue-100 p-3 rounded-lg">
++++          <div class="font-bold text-blue-700">B Tier</div>
++++          <div class="text-sm text-blue-600">Good</div>
++++        </div>
++++        <div class="bg-yellow-100 p-3 rounded-lg">
++++          <div class="font-bold text-yellow-700">C Tier</div>
++++          <div class="text-sm text-yellow-600">Average</div>
++++        </div>
++++        <div class="bg-orange-100 p-3 rounded-lg">
++++          <div class="font-bold text-orange-700">D Tier</div>
++++          <div class="text-sm text-orange-600">Below average</div>
++++        </div>
++++        <div class="bg-gray-100 p-3 rounded-lg">
++++          <div class="font-bold text-gray-700">F Tier</div>
++++          <div class="text-sm text-gray-600">Avoid</div>
++++        </div>
++++      </div>
++++    </div>
++++  </div>
++++</Layout>
+++diff --git a/src/types.ts b/src/types.ts
+++new file mode 100644
+++index 0000000..18fdef8
+++--- /dev/null
++++++ b/src/types.ts
+++@@ -0,0 +1,41 @@
++++// Type definitions for TrendTiers affiliate website
++++
++++export interface Product {
++++  name: string;
++++  review: string;
++++  link: string;
++++  price?: string;
++++  image?: string;
++++}
++++
++++export interface TierData {
++++  [tierKey: string]: Product[];
++++}
++++
++++export interface TierListProps {
++++  tiers: TierData;
++++}
++++
++++export interface ArticleFrontmatter {
++++  title: string;
++++  description: string;
++++  pubDate: Date;
++++  slug: string;
++++  image?: string;
++++  tags: string[];
++++}
++++
++++export interface AffiliateConfig {
++++  [provider: string]: {
++++    baseUrl: string;
++++    trackingId: string;
++++  };
++++}
++++
++++export interface ProductLinks {
++++  [productId: string]: {
++++    [provider: string]: string;
++++  } & {
++++    price?: string;
++++  };
++++}
+++diff --git a/src/utils/affiliates.json b/src/utils/affiliates.json
+++new file mode 100644
+++index 0000000..f022fb6
+++--- /dev/null
++++++ b/src/utils/affiliates.json
+++@@ -0,0 +1,30 @@
++++{
++++  "amazon": {
++++    "baseUrl": "https://amzn.to/",
++++    "trackingId": "trendtiers-20"
++++  },
++++  "bestbuy": {
++++    "baseUrl": "https://bestbuy.7tiv.net/c/",
++++    "trackingId": "123456"
++++  },
++++  "newegg": {
++++    "baseUrl": "https://click.linksynergy.com/deeplink?",
++++    "trackingId": "newegg-affiliate-id"
++++  },
++++  "products": {
++++    "arctis-pro-wireless": {
++++      "amazon": "https://amzn.to/3XYZ123",
++++      "bestbuy": "https://bestbuy.7tiv.net/c/123456/product-id",
++++      "price": "$329.99"
++++    },
++++    "audeze-maxwell": {
++++      "amazon": "https://amzn.to/3ABC456",
++++      "price": "$399.99"
++++    },
++++    "hyperx-cloud-alpha-s": {
++++      "amazon": "https://amzn.to/3DEF789",
++++      "bestbuy": "https://bestbuy.7tiv.net/c/123456/hyperx-alpha",
++++      "price": "$129.99"
++++    }
++++  }
++++}
+++diff --git a/tailwind.config.mjs b/tailwind.config.mjs
+++new file mode 100644
+++index 0000000..d88a743
+++--- /dev/null
++++++ b/tailwind.config.mjs
+++@@ -0,0 +1,17 @@
++++/** @type {import('tailwindcss').Config} */
++++export default {
++++  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
++++  theme: {
++++    extend: {
++++      colors: {
++++        'tier-s': '#ff6b6b',
++++        'tier-a': '#4ecdc4',
++++        'tier-b': '#45b7d1',
++++        'tier-c': '#96ceb4',
++++        'tier-d': '#ffeaa7',
++++        'tier-f': '#ddd6fe'
++++      }
++++    },
++++  },
++++  plugins: [],
++++}
+++
++
+diff --git a/diffs/commit_diff_20250723_151752_e3cb6eb.patch b/diffs/commit_diff_20250723_151752_e3cb6eb.patch
+new file mode 100644
+index 0000000..64f7c78
+--- /dev/null
++++ b/diffs/commit_diff_20250723_151752_e3cb6eb.patch
+@@ -0,0 +1,1012 @@
++﻿# Commit Diff Summary
++# Generated on: 07/23/2025 15:17:52
++# Branch: main
++# Commit: e3cb6eb8ad5ac785e680055491f8296c3243cc17
++# Previous: 247ce70bc5ffac5d06e214772fb79cbc43c7c2bf
++# Message: Add commit diff for TierList component creation
++# Files changed:
++#   diffs/commit_diff_20250723_151650_8bd2120.patch
++
++diff --git a/diffs/commit_diff_20250723_151650_8bd2120.patch b/diffs/commit_diff_20250723_151650_8bd2120.patch
++new file mode 100644
++index 0000000..8d40f3a
++--- /dev/null
+++++ b/diffs/commit_diff_20250723_151650_8bd2120.patch
++@@ -0,0 +1,996 @@
+++﻿# Commit Diff Summary
+++# Generated on: 07/23/2025 15:16:50
+++# Branch: main
+++# Commit: 8bd2120d6755c9a409ff688d84dacc0c1cc16bd0
+++# Previous: a5c3347fdc6d43934f188db26423f25d4e45d867
+++# Message: Add pages and enhance TierList component
+++# Files changed:
+++#   .gitignore
+++#   diffs/commit_diff_20250723_151515_a5c3347.patch
+++#   src/components/AffiliateButton.astro
+++#   src/components/TierList.astro
+++#   src/pages/demo.astro
+++#   src/pages/index.astro
+++
+++diff --git a/.gitignore b/.gitignore
+++index cce1430..2ceddbe 100644
+++--- a/.gitignore
++++++ b/.gitignore
+++@@ -59,5 +59,12 @@ yarn-error.log*
+++ # Node modules (if using Node.js)
+++ node_modules/
+++ 
++++# Astro build output
++++dist/
++++.astro/
++++
++++# Embedded repositories
++++molecular-meridian/
++++
+++ # Diff files are tracked, but adding comment for clarity
+++ # diffs/ - This directory contains auto-generated diff files
+++diff --git a/diffs/commit_diff_20250723_151515_a5c3347.patch b/diffs/commit_diff_20250723_151515_a5c3347.patch
+++new file mode 100644
+++index 0000000..4e54631
+++--- /dev/null
++++++ b/diffs/commit_diff_20250723_151515_a5c3347.patch
+++@@ -0,0 +1,698 @@
++++﻿# Commit Diff Summary
++++# Generated on: 07/23/2025 15:15:15
++++# Branch: main
++++# Commit: a5c3347fdc6d43934f188db26423f25d4e45d867
++++# Previous: 77fbb03b1a89a0bfae3ba5f2f6f6456df254c975
++++# Message: Create TrendTiers Astro affiliate website structure
++++# Files changed:
++++#   # TrendTiers.md
++++#   astro.config.mjs
++++#   diffs/commit_diff_20250723_150354_2b2679e.patch
++++#   diffs/commit_diff_20250723_150409_77fbb03.patch
++++#   package.json
++++#   src/components/TierList.astro
++++#   src/content/tierlists/best-gaming-headsets-2025.mdx
++++#   src/layouts/Layout.astro
++++#   src/types.ts
++++#   src/utils/affiliates.json
++++#   tailwind.config.mjs
++++
++++diff --git a/# TrendTiers.md b/# TrendTiers.md
++++new file mode 100644
++++index 0000000..6874f51
++++--- /dev/null
+++++++ b/# TrendTiers.md	
++++@@ -0,0 +1,96 @@
+++++# TrendTiers.com – Copilot Reference
+++++
+++++## 📘 Purpose
+++++TrendTiers.com is a fully static, SEO-optimized affiliate website that publishes tier list–style product recommendation articles. Each page is auto-generated using LLMs and features:
+++++- Tiered rankings (S, A, B, etc.)
+++++- Short reviews and justifications per product
+++++- Affiliate links
+++++- Stock images
+++++- SEO metadata
+++++
+++++## 🧱 Tech Stack
+++++- Astro (static site generator)
+++++- MDX content files (1 per tier list)
+++++- Minimal JavaScript
+++++- GitHub + Vercel for CI/CD
+++++- GitHub Copilot for assisted development
+++++- No backend or database
+++++
+++++## 📁 Folder Structure
+++++
+++++/src
+++++/components → TierList and utility UI
+++++/content/tierlists → AI-generated MDX articles
+++++/pages → Home and dynamic routes
+++++/layouts → Site layout
+++++/scripts → Generation scripts (AI, scraping, etc.)
+++++/public/images → Product images
+++++/utils/affiliates.json → Master list of affiliate URLs
+++++
+++++
+++++## 📄 MDX File Format (Tier List)
+++++Each article lives at `/src/content/tierlists/{slug}.mdx` and uses:
+++++```mdx
+++++---
+++++title: Best X in YYYY
+++++description: SEO meta description
+++++pubDate: 2025-07-23
+++++slug: best-x-in-yyyy
+++++image: /images/example.jpg
+++++tags: [tag1, tag2]
+++++---
+++++
+++++import TierList from '../../components/TierList.astro'
+++++
+++++<TierList
+++++  tiers={{
+++++    "S": [
+++++      { name: "Product A", review: "Excellent for X", link: "https://amzn.to/..." }
+++++    ],
+++++    "A": [
+++++      { name: "Product B", review: "Budget option", link: "https://amzn.to/..." }
+++++    ]
+++++  }}
+++++/>
+++++
+++++💡 Components Overview
+++++TierList.astro
+++++
+++++Renders each tier (S, A, B...) as a section with the product's name, review, and affiliate link.
+++++AffiliateButton.astro (optional)
+++++
+++++Reusable button with cloaked or dynamic URL via utils/affiliates.json.
+++++🌐 SEO
+++++
+++++Every page should:
+++++
+++++    Include Open Graph and Twitter metadata in <head>
+++++
+++++    Inject JSON-LD using schema.org (type: ItemList)
+++++
+++++    Have a canonical URL
+++++
+++++🧠 Copilot Behavior
+++++
+++++    Generate content-first components
+++++
+++++    Use Astro props and Astro.glob/getCollection for dynamic content
+++++
+++++    Avoid React/JSX unless explicitly used in components
+++++
+++++    Assume each page is static and should render without JS
+++++
+++++🛠 Planned Scripts
+++++
+++++    generate-tier.js: Uses LLM API to generate an MDX tier list article
+++++
+++++    find-trends.js: Crawls Reddit/Exploding Topics/Google Trends
+++++
+++++    GitHub Actions to run the above and deploy to Vercel
+++++
+++++
+++++---
+++++
+++++Once that’s added to the project root, send me a quick "📌 Reference added" and I’ll give you the first Copilot prompt in the correct order. I’ll wait for each diff before moving forward.
+++++
+++++Ready?
++++\ No newline at end of file
++++diff --git a/astro.config.mjs b/astro.config.mjs
++++new file mode 100644
++++index 0000000..038f942
++++--- /dev/null
+++++++ b/astro.config.mjs
++++@@ -0,0 +1,16 @@
+++++import { defineConfig } from 'astro/config';
+++++import mdx from '@astrojs/mdx';
+++++import tailwind from '@astrojs/tailwind';
+++++
+++++// https://astro.build/config
+++++export default defineConfig({
+++++  integrations: [
+++++    mdx(),
+++++    tailwind()
+++++  ],
+++++  site: 'https://trendtiers.com',
+++++  output: 'static',
+++++  build: {
+++++    format: 'directory'
+++++  }
+++++});
++++diff --git a/diffs/commit_diff_20250723_150354_2b2679e.patch b/diffs/commit_diff_20250723_150354_2b2679e.patch
++++new file mode 100644
++++index 0000000..1b63975
++++--- /dev/null
+++++++ b/diffs/commit_diff_20250723_150354_2b2679e.patch
++++@@ -0,0 +1,55 @@
+++++﻿# Commit Diff Summary
+++++# Generated on: 07/23/2025 15:03:54
+++++# Branch: main
+++++# Commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
+++++# Previous: 47a11e46126cc2dac19c6f26d4994749f0874c61
+++++# Message: Add post-commit diff file for README update
+++++# Files changed:
+++++#   diffs/commit_diff_20250723_150323_47a11e4.patch
+++++
+++++diff --git a/diffs/commit_diff_20250723_150323_47a11e4.patch b/diffs/commit_diff_20250723_150323_47a11e4.patch
+++++new file mode 100644
+++++index 0000000..020092e
+++++--- /dev/null
++++++++ b/diffs/commit_diff_20250723_150323_47a11e4.patch
+++++@@ -0,0 +1,39 @@
++++++﻿# Commit Diff Summary
++++++# Generated on: 07/23/2025 15:03:23
++++++# Branch: main
++++++# Commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
++++++# Previous: 5a5bcd6e160167f5b51c174ec63c1678eafd9d59
++++++# Message: Test post-commit hook - Update README with enhanced features
++++++# Files changed:
++++++#   README.md
++++++
++++++diff --git a/README.md b/README.md
++++++index ff8abe0..e15204a 100644
++++++--- a/README.md
+++++++++ b/README.md
++++++@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
++++++ 
++++++ ## Getting Started
++++++ 
++++++-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
+++++++This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
+++++++
+++++++## Features
+++++++
+++++++- **Automatic Diff Generation**: Creates diff files for every commit and push
+++++++- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
+++++++- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
+++++++- **Complete History**: Maintains a permanent record of all changes
++++++ 
++++++ ## Installation
++++++ 
++++++@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
++++++ 
++++++ ## Diff System
++++++ 
++++++-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+++++++This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
++++++ 
++++++ ## Contributing
++++++ 
++++++
+++++
++++diff --git a/diffs/commit_diff_20250723_150409_77fbb03.patch b/diffs/commit_diff_20250723_150409_77fbb03.patch
++++new file mode 100644
++++index 0000000..c6087bf
++++--- /dev/null
+++++++ b/diffs/commit_diff_20250723_150409_77fbb03.patch
++++@@ -0,0 +1,70 @@
+++++﻿# Commit Diff Summary
+++++# Generated on: 07/23/2025 15:04:09
+++++# Branch: main
+++++# Commit: 77fbb03b1a89a0bfae3ba5f2f6f6456df254c975
+++++# Previous: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
+++++# Message: Add diff file: diffs/diff_20250723_150405_2b2679e.patch
+++++# Files changed:
+++++#   diffs/diff_20250723_150405_2b2679e.patch
+++++
+++++diff --git a/diffs/diff_20250723_150405_2b2679e.patch b/diffs/diff_20250723_150405_2b2679e.patch
+++++new file mode 100644
+++++index 0000000..9c5056d
+++++--- /dev/null
++++++++ b/diffs/diff_20250723_150405_2b2679e.patch
+++++@@ -0,0 +1,54 @@
++++++﻿# Diff Summary
++++++# Generated on: 07/23/2025 15:04:05
++++++# Branch: main
++++++# From commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
++++++# To commit: 2b2679ea1e15678cdd4917e66a37b38fa2eb4eef
++++++# Files changed:
++++++#   diffs/commit_diff_20250723_150323_47a11e4.patch
++++++
++++++diff --git a/diffs/commit_diff_20250723_150323_47a11e4.patch b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++++new file mode 100644
++++++index 0000000..020092e
++++++--- /dev/null
+++++++++ b/diffs/commit_diff_20250723_150323_47a11e4.patch
++++++@@ -0,0 +1,39 @@
+++++++﻿# Commit Diff Summary
+++++++# Generated on: 07/23/2025 15:03:23
+++++++# Branch: main
+++++++# Commit: 47a11e46126cc2dac19c6f26d4994749f0874c61
+++++++# Previous: 5a5bcd6e160167f5b51c174ec63c1678eafd9d59
+++++++# Message: Test post-commit hook - Update README with enhanced features
+++++++# Files changed:
+++++++#   README.md
+++++++
+++++++diff --git a/README.md b/README.md
+++++++index ff8abe0..e15204a 100644
+++++++--- a/README.md
++++++++++ b/README.md
+++++++@@ -4,7 +4,14 @@ A web application for affiliate marketing management.
+++++++ 
+++++++ ## Getting Started
+++++++ 
+++++++-This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every push to GitHub.
++++++++This project is currently in development. The repository includes an automatic diff generation system that creates unique diff files for every commit and push to GitHub.
++++++++
++++++++## Features
++++++++
++++++++- **Automatic Diff Generation**: Creates diff files for every commit and push
++++++++- **Multiple Hook Types**: Post-commit and pre-push hooks for comprehensive tracking
++++++++- **Manual Diff Creation**: On-demand diff generation with PowerShell scripts
++++++++- **Complete History**: Maintains a permanent record of all changes
+++++++ 
+++++++ ## Installation
+++++++ 
+++++++@@ -35,7 +42,7 @@ This project is currently in development. The repository includes an automatic d
+++++++ 
+++++++ ## Diff System
+++++++ 
+++++++-This repository automatically generates diff files for every push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
++++++++This repository automatically generates diff files for every commit and push. See `DIFF_SYSTEM.md` for detailed information about the automatic diff generation system.
+++++++ 
+++++++ ## Contributing
+++++++ 
+++++++
++++++
+++++
++++diff --git a/package.json b/package.json
++++new file mode 100644
++++index 0000000..913d7cb
++++--- /dev/null
+++++++ b/package.json
++++@@ -0,0 +1,21 @@
+++++{
+++++  "name": "trendtiers-affiliate-web",
+++++  "type": "module",
+++++  "version": "0.0.1",
+++++  "scripts": {
+++++    "dev": "astro dev",
+++++    "start": "astro dev",
+++++    "build": "astro build",
+++++    "preview": "astro preview",
+++++    "astro": "astro"
+++++  },
+++++  "dependencies": {
+++++    "astro": "^4.0.0",
+++++    "@astrojs/mdx": "^2.0.0",
+++++    "@astrojs/tailwind": "^5.0.0",
+++++    "tailwindcss": "^3.0.0"
+++++  },
+++++  "devDependencies": {
+++++    "@types/node": "^20.0.0"
+++++  }
+++++}
++++diff --git a/src/components/TierList.astro b/src/components/TierList.astro
++++new file mode 100644
++++index 0000000..6658d86
++++--- /dev/null
+++++++ b/src/components/TierList.astro
++++@@ -0,0 +1,83 @@
+++++---
+++++// TierList.astro - Component for displaying tiered product recommendations
+++++export interface Props {
+++++  tiers: {
+++++    [key: string]: Array<{
+++++      name: string;
+++++      review: string;
+++++      link: string;
+++++    }>;
+++++  };
+++++}
+++++
+++++const { tiers } = Astro.props;
+++++
+++++// Define tier order to ensure consistent display
+++++const tierOrder = ['S', 'A', 'B', 'C', 'D', 'F'];
+++++
+++++// Get only the tiers that exist in the data, in the correct order
+++++const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length > 0);
+++++---
+++++
+++++<div class="tier-list">
+++++  {sortedTiers.map((tierKey) => (
+++++    <section class="tier-section mb-6">
+++++      <h2 class="tier-heading text-xl font-bold mb-4 bg-gray-100 p-4 rounded">
+++++        Tier {tierKey}
+++++      </h2>
+++++      
+++++      <div class="products-grid">
+++++        {tiers[tierKey].map((product) => (
+++++          <div class="product-card bg-white border border-gray-200 p-4 rounded mb-4 shadow-sm">
+++++            <h3 class="product-name text-lg font-semibold mb-2">
+++++              {product.name}
+++++            </h3>
+++++            
+++++            <p class="product-review text-gray-700 mb-3">
+++++              {product.review}
+++++            </p>
+++++            
+++++            <a 
+++++              href={product.link}
+++++              class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+++++              rel="sponsored"
+++++              target="_blank"
+++++            >
+++++              Buy Now
+++++            </a>
+++++          </div>
+++++        ))}
+++++      </div>
+++++    </section>
+++++  ))}
+++++</div>
+++++
+++++<style>
+++++  .tier-list {
+++++    max-width: 800px;
+++++    margin: 0 auto;
+++++  }
+++++  
+++++  .tier-heading {
+++++    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+++++    border-left: 4px solid #3b82f6;
+++++  }
+++++  
+++++  .product-card {
+++++    transition: transform 0.2s ease, box-shadow 0.2s ease;
+++++  }
+++++  
+++++  .product-card:hover {
+++++    transform: translateY(-2px);
+++++    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+++++  }
+++++  
+++++  .buy-now-button {
+++++    text-decoration: none;
+++++    font-weight: 500;
+++++  }
+++++  
+++++  .buy-now-button:hover {
+++++    text-decoration: none;
+++++  }
+++++</style>
++++diff --git a/src/content/tierlists/best-gaming-headsets-2025.mdx b/src/content/tierlists/best-gaming-headsets-2025.mdx
++++new file mode 100644
++++index 0000000..d880e63
++++--- /dev/null
+++++++ b/src/content/tierlists/best-gaming-headsets-2025.mdx
++++@@ -0,0 +1,88 @@
+++++---
+++++title: Best Gaming Headsets 2025
+++++description: Complete tier list ranking of the best gaming headsets for competitive gaming, streaming, and casual play
+++++pubDate: 2025-07-23
+++++slug: best-gaming-headsets-2025
+++++image: /images/gaming-headsets.jpg
+++++tags: [gaming, headsets, audio, tech]
+++++---
+++++
+++++import TierList from '../../components/TierList.astro'
+++++
+++++# Best Gaming Headsets 2025 - Complete Tier List
+++++
+++++Looking for the perfect gaming headset? We've tested dozens of models and ranked them in our comprehensive tier list. From professional esports headsets to budget-friendly options, find your perfect audio companion.
+++++
+++++<TierList
+++++  tiers={{
+++++    "S": [
+++++      { 
+++++        name: "SteelSeries Arctis Pro Wireless", 
+++++        review: "Premium wireless with exceptional audio quality and comfort for long gaming sessions. Dual battery system ensures uninterrupted gameplay.", 
+++++        link: "https://amzn.to/arctis-pro-wireless" 
+++++      },
+++++      { 
+++++        name: "Audeze Maxwell", 
+++++        review: "Audiophile-grade planar magnetic drivers deliver unmatched sound quality. Perfect for both gaming and music production.", 
+++++        link: "https://amzn.to/audeze-maxwell" 
+++++      }
+++++    ],
+++++    "A": [
+++++      { 
+++++        name: "HyperX Cloud Alpha S", 
+++++        review: "Excellent build quality and clear microphone. Great value for competitive gaming with reliable 7.1 surround sound.", 
+++++        link: "https://amzn.to/hyperx-cloud-alpha-s" 
+++++      },
+++++      { 
+++++        name: "Corsair HS80 RGB Wireless", 
+++++        review: "Solid wireless performance with good battery life. RGB lighting and comfortable memory foam padding.", 
+++++        link: "https://amzn.to/corsair-hs80-wireless" 
+++++      },
+++++      { 
+++++        name: "Razer BlackShark V2 Pro", 
+++++        review: "Professional esports headset with THX Spatial Audio. Lightweight design perfect for tournament play.", 
+++++        link: "https://amzn.to/razer-blackshark-v2-pro" 
+++++      }
+++++    ],
+++++    "B": [
+++++      { 
+++++        name: "Logitech G733 Lightspeed", 
+++++        review: "Fun RGB lighting and decent wireless performance. Good for casual gaming but lacks premium audio quality.", 
+++++        link: "https://amzn.to/logitech-g733" 
+++++      },
+++++      { 
+++++        name: "Turtle Beach Stealth 600", 
+++++        review: "Budget-friendly wireless option with decent sound. Good entry point for console gamers.", 
+++++        link: "https://amzn.to/turtle-beach-stealth-600" 
+++++      }
+++++    ],
+++++    "C": [
+++++      { 
+++++        name: "ASUS TUF Gaming H3", 
+++++        review: "Basic wired headset with okay build quality. Suitable for occasional gaming but nothing special.", 
+++++        link: "https://amzn.to/asus-tuf-h3" 
+++++      }
+++++    ]
+++++  }}
+++++/>
+++++
+++++## What Makes a Great Gaming Headset?
+++++
+++++When choosing a gaming headset, consider these key factors:
+++++
+++++- **Audio Quality**: Clear highs and deep bass for immersive gameplay
+++++- **Microphone**: Crystal clear communication with noise cancellation
+++++- **Comfort**: Lightweight design with soft padding for long sessions
+++++- **Compatibility**: Works across all your gaming platforms
+++++- **Wireless vs Wired**: Consider latency and battery life needs
+++++
+++++## Frequently Asked Questions
+++++
+++++**Q: Are wireless gaming headsets worth it?**
+++++A: Modern wireless headsets have virtually eliminated latency issues. If you value freedom of movement, go wireless.
+++++
+++++**Q: What's the difference between stereo and surround sound?**
+++++A: Surround sound helps with directional audio in competitive games, while stereo often provides better music quality.
+++++
+++++**Q: How important is the microphone quality?**
+++++A: Essential for team communication. Look for noise cancellation and flip-to-mute features.
++++diff --git a/src/layouts/Layout.astro b/src/layouts/Layout.astro
++++new file mode 100644
++++index 0000000..dfba5ec
++++--- /dev/null
+++++++ b/src/layouts/Layout.astro
++++@@ -0,0 +1,94 @@
+++++---
+++++export interface Props {
+++++  title: string;
+++++  description?: string;
+++++  image?: string;
+++++  pubDate?: Date;
+++++}
+++++
+++++const { title, description, image, pubDate } = Astro.props;
+++++const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+++++---
+++++
+++++<!DOCTYPE html>
+++++<html lang="en">
+++++  <head>
+++++    <meta charset="UTF-8" />
+++++    <meta name="description" content={description || "TrendTiers - The best product tier lists and recommendations"} />
+++++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+++++    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+++++    <meta name="generator" content={Astro.generator} />
+++++    
+++++    <!-- Canonical URL -->
+++++    <link rel="canonical" href={canonicalURL} />
+++++    
+++++    <!-- Primary Meta Tags -->
+++++    <title>{title} | TrendTiers</title>
+++++    <meta name="title" content={`${title} | TrendTiers`} />
+++++    <meta name="description" content={description} />
+++++    
+++++    <!-- Open Graph / Facebook -->
+++++    <meta property="og:type" content="website" />
+++++    <meta property="og:url" content={canonicalURL} />
+++++    <meta property="og:title" content={`${title} | TrendTiers`} />
+++++    <meta property="og:description" content={description} />
+++++    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+++++    
+++++    <!-- Twitter -->
+++++    <meta property="twitter:card" content="summary_large_image" />
+++++    <meta property="twitter:url" content={canonicalURL} />
+++++    <meta property="twitter:title" content={`${title} | TrendTiers`} />
+++++    <meta property="twitter:description" content={description} />
+++++    {image && <meta property="twitter:image" content={new URL(image, Astro.site)} />}
+++++    
+++++    <!-- JSON-LD Schema -->
+++++    {pubDate && (
+++++      <script type="application/ld+json" set:html={JSON.stringify({
+++++        "@context": "https://schema.org",
+++++        "@type": "ItemList",
+++++        "name": title,
+++++        "description": description,
+++++        "url": canonicalURL.toString(),
+++++        "datePublished": pubDate.toISOString(),
+++++        "publisher": {
+++++          "@type": "Organization",
+++++          "name": "TrendTiers",
+++++          "url": "https://trendtiers.com"
+++++        }
+++++      })} />
+++++    )}
+++++  </head>
+++++  <body class="bg-gray-50 text-gray-900">
+++++    <header class="bg-white shadow-sm border-b">
+++++      <nav class="max-w-6xl mx-auto px-4 py-4">
+++++        <div class="flex items-center justify-between">
+++++          <a href="/" class="text-2xl font-bold text-blue-600">
+++++            TrendTiers
+++++          </a>
+++++          <div class="hidden md:flex space-x-6">
+++++            <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
+++++            <a href="/categories" class="text-gray-600 hover:text-blue-600 transition-colors">Categories</a>
+++++            <a href="/about" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
+++++          </div>
+++++        </div>
+++++      </nav>
+++++    </header>
+++++    
+++++    <main class="max-w-4xl mx-auto px-4 py-8">
+++++      <slot />
+++++    </main>
+++++    
+++++    <footer class="bg-gray-100 border-t mt-16">
+++++      <div class="max-w-6xl mx-auto px-4 py-8">
+++++        <div class="text-center text-gray-600">
+++++          <p>&copy; 2025 TrendTiers. All rights reserved.</p>
+++++          <p class="mt-2 text-sm">
+++++            <a href="/privacy" class="hover:text-blue-600">Privacy Policy</a> |
+++++            <a href="/terms" class="hover:text-blue-600 ml-2">Terms of Service</a> |
+++++            <a href="/affiliate-disclosure" class="hover:text-blue-600 ml-2">Affiliate Disclosure</a>
+++++          </p>
+++++        </div>
+++++      </div>
+++++    </footer>
+++++  </body>
+++++</html>
++++diff --git a/src/types.ts b/src/types.ts
++++new file mode 100644
++++index 0000000..18fdef8
++++--- /dev/null
+++++++ b/src/types.ts
++++@@ -0,0 +1,41 @@
+++++// Type definitions for TrendTiers affiliate website
+++++
+++++export interface Product {
+++++  name: string;
+++++  review: string;
+++++  link: string;
+++++  price?: string;
+++++  image?: string;
+++++}
+++++
+++++export interface TierData {
+++++  [tierKey: string]: Product[];
+++++}
+++++
+++++export interface TierListProps {
+++++  tiers: TierData;
+++++}
+++++
+++++export interface ArticleFrontmatter {
+++++  title: string;
+++++  description: string;
+++++  pubDate: Date;
+++++  slug: string;
+++++  image?: string;
+++++  tags: string[];
+++++}
+++++
+++++export interface AffiliateConfig {
+++++  [provider: string]: {
+++++    baseUrl: string;
+++++    trackingId: string;
+++++  };
+++++}
+++++
+++++export interface ProductLinks {
+++++  [productId: string]: {
+++++    [provider: string]: string;
+++++  } & {
+++++    price?: string;
+++++  };
+++++}
++++diff --git a/src/utils/affiliates.json b/src/utils/affiliates.json
++++new file mode 100644
++++index 0000000..f022fb6
++++--- /dev/null
+++++++ b/src/utils/affiliates.json
++++@@ -0,0 +1,30 @@
+++++{
+++++  "amazon": {
+++++    "baseUrl": "https://amzn.to/",
+++++    "trackingId": "trendtiers-20"
+++++  },
+++++  "bestbuy": {
+++++    "baseUrl": "https://bestbuy.7tiv.net/c/",
+++++    "trackingId": "123456"
+++++  },
+++++  "newegg": {
+++++    "baseUrl": "https://click.linksynergy.com/deeplink?",
+++++    "trackingId": "newegg-affiliate-id"
+++++  },
+++++  "products": {
+++++    "arctis-pro-wireless": {
+++++      "amazon": "https://amzn.to/3XYZ123",
+++++      "bestbuy": "https://bestbuy.7tiv.net/c/123456/product-id",
+++++      "price": "$329.99"
+++++    },
+++++    "audeze-maxwell": {
+++++      "amazon": "https://amzn.to/3ABC456",
+++++      "price": "$399.99"
+++++    },
+++++    "hyperx-cloud-alpha-s": {
+++++      "amazon": "https://amzn.to/3DEF789",
+++++      "bestbuy": "https://bestbuy.7tiv.net/c/123456/hyperx-alpha",
+++++      "price": "$129.99"
+++++    }
+++++  }
+++++}
++++diff --git a/tailwind.config.mjs b/tailwind.config.mjs
++++new file mode 100644
++++index 0000000..d88a743
++++--- /dev/null
+++++++ b/tailwind.config.mjs
++++@@ -0,0 +1,17 @@
+++++/** @type {import('tailwindcss').Config} */
+++++export default {
+++++  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+++++  theme: {
+++++    extend: {
+++++      colors: {
+++++        'tier-s': '#ff6b6b',
+++++        'tier-a': '#4ecdc4',
+++++        'tier-b': '#45b7d1',
+++++        'tier-c': '#96ceb4',
+++++        'tier-d': '#ffeaa7',
+++++        'tier-f': '#ddd6fe'
+++++      }
+++++    },
+++++  },
+++++  plugins: [],
+++++}
++++
+++diff --git a/src/components/AffiliateButton.astro b/src/components/AffiliateButton.astro
+++new file mode 100644
+++index 0000000..0b1b34c
+++--- /dev/null
++++++ b/src/components/AffiliateButton.astro
+++@@ -0,0 +1,61 @@
++++---
++++// AffiliateButton.astro - Reusable affiliate button component
++++export interface Props {
++++  href: string;
++++  text?: string;
++++  variant?: 'primary' | 'secondary' | 'outline';
++++  size?: 'sm' | 'md' | 'lg';
++++  class?: string;
++++}
++++
++++const { 
++++  href, 
++++  text = 'Buy Now', 
++++  variant = 'primary', 
++++  size = 'md',
++++  class: className = '' 
++++} = Astro.props;
++++
++++// Base classes
++++const baseClasses = 'inline-flex items-center justify-center font-medium rounded transition-all duration-200 no-underline';
++++
++++// Size classes
++++const sizeClasses = {
++++  sm: 'px-3 py-1.5 text-sm',
++++  md: 'px-4 py-2 text-base',
++++  lg: 'px-6 py-3 text-lg'
++++};
++++
++++// Variant classes
++++const variantClasses = {
++++  primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-200',
++++  secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-200',
++++  outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white focus:ring-4 focus:ring-blue-200'
++++};
++++
++++const buttonClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
++++---
++++
++++<a 
++++  href={href}
++++  class={buttonClasses}
++++  rel="sponsored"
++++  target="_blank"
++++  aria-label={`${text} - Opens in new tab`}
++++>
++++  <span>{text}</span>
++++  <svg 
++++    class="ml-2 w-4 h-4" 
++++    fill="none" 
++++    stroke="currentColor" 
++++    viewBox="0 0 24 24"
++++    aria-hidden="true"
++++  >
++++    <path 
++++      stroke-linecap="round" 
++++      stroke-linejoin="round" 
++++      stroke-width="2" 
++++      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
++++    />
++++  </svg>
++++</a>
+++diff --git a/src/components/TierList.astro b/src/components/TierList.astro
+++index 6658d86..6b91822 100644
+++--- a/src/components/TierList.astro
++++++ b/src/components/TierList.astro
+++@@ -1,5 +1,7 @@
+++ ---
+++ // TierList.astro - Component for displaying tiered product recommendations
++++import AffiliateButton from './AffiliateButton.astro';
++++
+++ export interface Props {
+++   tiers: {
+++     [key: string]: Array<{
+++@@ -8,9 +10,10 @@ export interface Props {
+++       link: string;
+++     }>;
+++   };
++++  useButtons?: boolean;
+++ }
+++ 
+++-const { tiers } = Astro.props;
++++const { tiers, useButtons = false } = Astro.props;
+++ 
+++ // Define tier order to ensure consistent display
+++ const tierOrder = ['S', 'A', 'B', 'C', 'D', 'F'];
+++@@ -37,14 +40,18 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
+++               {product.review}
+++             </p>
+++             
+++-            <a 
+++-              href={product.link}
+++-              class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+++-              rel="sponsored"
+++-              target="_blank"
+++-            >
+++-              Buy Now
+++-            </a>
++++            {useButtons ? (
++++              <AffiliateButton href={product.link} />
++++            ) : (
++++              <a 
++++                href={product.link}
++++                class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
++++                rel="sponsored"
++++                target="_blank"
++++              >
++++                Buy Now
++++              </a>
++++            )}
+++           </div>
+++         ))}
+++       </div>
+++diff --git a/src/pages/demo.astro b/src/pages/demo.astro
+++new file mode 100644
+++index 0000000..a0b8e9e
+++--- /dev/null
++++++ b/src/pages/demo.astro
+++@@ -0,0 +1,61 @@
++++---
++++import Layout from '../layouts/Layout.astro';
++++import TierList from '../components/TierList.astro';
++++
++++const sampleTiers = {
++++  "S": [
++++    { 
++++      name: "Premium Product A", 
++++      review: "Exceptional quality and performance. Worth every penny for serious users.", 
++++      link: "https://amzn.to/premium-a" 
++++    }
++++  ],
++++  "A": [
++++    { 
++++      name: "Great Product B", 
++++      review: "Excellent value for money with solid performance across all metrics.", 
++++      link: "https://amzn.to/great-b" 
++++    },
++++    { 
++++      name: "Reliable Product C", 
++++      review: "Consistent performer with good build quality. Perfect for most users.", 
++++      link: "https://amzn.to/reliable-c" 
++++    }
++++  ],
++++  "B": [
++++    { 
++++      name: "Decent Product D", 
++++      review: "Good budget option with some compromises but still functional.", 
++++      link: "https://amzn.to/decent-d" 
++++    }
++++  ]
++++};
++++---
++++
++++<Layout 
++++  title="TierList Component Demo"
++++  description="Example demonstration of the TierList Astro component for affiliate product rankings"
++++>
++++  <div class="prose lg:prose-xl mx-auto">
++++    <h1 class="text-3xl font-bold mb-8">TierList Component Demo</h1>
++++    
++++    <p class="text-gray-600 mb-8">
++++      This page demonstrates the TierList Astro component in action. 
++++      Each tier displays products with their reviews and affiliate links.
++++    </p>
++++    
++++    <TierList tiers={sampleTiers} />
++++    
++++    <div class="mt-12 p-6 bg-blue-50 rounded-lg">
++++      <h2 class="text-xl font-semibold mb-4">Component Features:</h2>
++++      <ul class="list-disc pl-6 space-y-2">
++++        <li>Responsive design with Tailwind CSS</li>
++++        <li>Semantic HTML structure for SEO</li>
++++        <li>Proper affiliate link attributes (rel="sponsored", target="_blank")</li>
++++        <li>Hover effects and smooth transitions</li>
++++        <li>Flexible tier system (S, A, B, C, D, F)</li>
++++        <li>TypeScript support for type safety</li>
++++      </ul>
++++    </div>
++++  </div>
++++</Layout>
+++diff --git a/src/pages/index.astro b/src/pages/index.astro
+++new file mode 100644
+++index 0000000..256bfab
+++--- /dev/null
++++++ b/src/pages/index.astro
+++@@ -0,0 +1,69 @@
++++---
++++import Layout from '../layouts/Layout.astro';
++++---
++++
++++<Layout 
++++  title="TrendTiers - Best Product Rankings & Affiliate Reviews"
++++  description="Discover the best products through our comprehensive tier list rankings. Expert reviews and recommendations for gaming, tech, lifestyle, and more."
++++>
++++  <div class="text-center">
++++    <h1 class="text-4xl font-bold text-gray-900 mb-6">
++++      Welcome to TrendTiers
++++    </h1>
++++    
++++    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
++++      The ultimate destination for tier list product rankings. 
++++      We test, review, and rank the best products so you don't have to.
++++    </p>
++++    
++++    <div class="grid md:grid-cols-3 gap-8 mt-12">
++++      <div class="bg-white p-6 rounded-lg shadow-sm border">
++++        <h3 class="text-xl font-semibold mb-4">🎮 Gaming</h3>
++++        <p class="text-gray-600 mb-4">Headsets, keyboards, mice, and gaming accessories ranked by performance.</p>
++++        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
++++      </div>
++++      
++++      <div class="bg-white p-6 rounded-lg shadow-sm border">
++++        <h3 class="text-xl font-semibold mb-4">💻 Tech</h3>
++++        <p class="text-gray-600 mb-4">Laptops, phones, and gadgets tested for value and performance.</p>
++++        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
++++      </div>
++++      
++++      <div class="bg-white p-6 rounded-lg shadow-sm border">
++++        <h3 class="text-xl font-semibold mb-4">🏠 Lifestyle</h3>
++++        <p class="text-gray-600 mb-4">Home, fitness, and everyday products ranked for quality and value.</p>
++++        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
++++      </div>
++++    </div>
++++    
++++    <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl">
++++      <h2 class="text-2xl font-bold mb-4">How Our Tier Lists Work</h2>
++++      <div class="grid md:grid-cols-6 gap-4 text-center">
++++        <div class="bg-red-100 p-3 rounded-lg">
++++          <div class="font-bold text-red-700">S Tier</div>
++++          <div class="text-sm text-red-600">Best in class</div>
++++        </div>
++++        <div class="bg-green-100 p-3 rounded-lg">
++++          <div class="font-bold text-green-700">A Tier</div>
++++          <div class="text-sm text-green-600">Excellent</div>
++++        </div>
++++        <div class="bg-blue-100 p-3 rounded-lg">
++++          <div class="font-bold text-blue-700">B Tier</div>
++++          <div class="text-sm text-blue-600">Good</div>
++++        </div>
++++        <div class="bg-yellow-100 p-3 rounded-lg">
++++          <div class="font-bold text-yellow-700">C Tier</div>
++++          <div class="text-sm text-yellow-600">Average</div>
++++        </div>
++++        <div class="bg-orange-100 p-3 rounded-lg">
++++          <div class="font-bold text-orange-700">D Tier</div>
++++          <div class="text-sm text-orange-600">Below average</div>
++++        </div>
++++        <div class="bg-gray-100 p-3 rounded-lg">
++++          <div class="font-bold text-gray-700">F Tier</div>
++++          <div class="text-sm text-gray-600">Avoid</div>
++++        </div>
++++      </div>
++++    </div>
++++  </div>
++++</Layout>
+++
++
+
