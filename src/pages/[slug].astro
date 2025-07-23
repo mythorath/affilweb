@@ -4,9 +4,15 @@ import Layout from '../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('tierlists');
-  
+
+  console.log('🧪 Fetched tierlists:', posts.length);
+
   return posts
-    .filter(post => post && post.slug) // safeguard
+    .filter((post) => {
+      const isValid = post && typeof post.slug === 'string' && post.slug.trim() !== '';
+      if (!isValid) console.warn('⚠️ Invalid post skipped:', post);
+      return isValid;
+    })
     .map((post) => ({
       params: { slug: post.slug },
       props: { post }
