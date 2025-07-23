@@ -185,7 +185,6 @@ function generateMDXContent(data, topic) {
 title: ${data.title}
 description: ${data.description}
 pubDate: ${currentDate}
-slug: ${slug}
 image: /images/${slug}.jpg
 tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
 products: ${JSON.stringify(allProducts, null, 2)}

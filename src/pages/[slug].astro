@@ -3,10 +3,10 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const tierListPosts = await getCollection('tierlists');
+  const posts = await getCollection('tierlists');
   
-  return tierListPosts.map((post) => ({
-    params: { slug: post.data.slug },
+  return posts.map((post) => ({
+    params: { slug: post.slug },
     props: { post },
   }));
 }
@@ -16,16 +16,16 @@ const { Content } = await post.render();
 
 // Use products from frontmatter if available, otherwise generate placeholder
 const products = post.data.products || [
-  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 1`, url: `https://amzn.to/${post.data.slug}-1` },
-  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 2`, url: `https://amzn.to/${post.data.slug}-2` },
-  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 3`, url: `https://amzn.to/${post.data.slug}-3` },
+  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 1`, url: `https://amzn.to/${post.slug}-1` },
+  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 2`, url: `https://amzn.to/${post.slug}-2` },
+  { name: `Best ${post.data.title.replace(/Best |Top |\d{4}/g, '')} Option 3`, url: `https://amzn.to/${post.slug}-3` },
 ];
 ---
 
 <Layout 
   title={post.data.title}
   description={post.data.description}
-  slug={post.data.slug}
+  slug={post.slug}
   image={post.data.image}
   tags={post.data.tags}
   pubDate={post.data.pubDate}
