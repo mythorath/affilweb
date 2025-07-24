@@ -45,10 +45,20 @@ import TierList from '../../components/TierList.astro'
 <TierList
   tiers={{
     "S": [
-      { name: "Product A", review: "Excellent for X", link: "https://amzn.to/..." }
+      { 
+        name: "Product A", 
+        review: "Excellent for X", 
+        link: "https://amzn.to/...",
+        image: "https://images-na.ssl-images-amazon.com/images/I/product.jpg"
+      }
     ],
     "A": [
-      { name: "Product B", review: "Budget option", link: "https://amzn.to/..." }
+      { 
+        name: "Product B", 
+        review: "Budget option", 
+        link: "https://amzn.to/...",
+        image: "https://m.media-amazon.com/images/I/product2.jpg"
+      }
     ]
   }}
 />
@@ -86,7 +96,19 @@ Every page should:
 
     find-trends.js: Crawls Reddit/Exploding Topics/Google Trends
 
+    addAmazonImages.mjs: Automatically fetches Amazon product images by ASIN
+
     GitHub Actions to run the above and deploy to Vercel
+
+🖼️ Image Management
+
+    Product images are automatically fetched from Amazon CDN when available
+
+    Images are optional - tierlists work with or without product images
+
+    Use utils/amazon.js functions to fetch images programmatically
+
+    Images display as responsive thumbnails in tier lists
 
 
 ---
