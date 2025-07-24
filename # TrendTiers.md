@@ -98,6 +98,8 @@ Every page should:
 
     addAmazonImages.mjs: Automatically fetches Amazon product images by ASIN
 
+    enhance-tierlists-with-images.mjs: Auto-enhances existing tierlists with missing product images using SerpAPI
+
     GitHub Actions to run the above and deploy to Vercel
 
 🖼️ Image Management
