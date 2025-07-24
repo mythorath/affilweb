@@ -8,6 +8,7 @@ export interface Props {
       name: string;
       review: string;
       link: string;
+      image?: string;
     }>;
   };
   useButtons?: boolean;
@@ -32,6 +33,17 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
       <div class="products-grid">
         {tiers[tierKey].map((product) => (
           <div class="product-card bg-white border border-gray-200 p-4 rounded mb-4 shadow-sm">
+            {product.image && (
+              <div class="product-image mb-3">
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  class="w-full h-32 object-cover rounded"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            
             <h3 class="product-name text-lg font-semibold mb-2">
               {product.name}
             </h3>

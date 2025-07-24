@@ -49,14 +49,16 @@ For `generateTierlist.mjs`, use this JSON structure:
       {
         "name": "Product Name",
         "review": "Detailed review explaining why it's in this tier",
-        "link": "https://amzn.to/affiliate-link"
+        "link": "https://amzn.to/affiliate-link",
+        "image": "https://example.com/product-image.jpg"
       }
     ],
     "A": [
       {
         "name": "Another Product",
         "review": "Review text for this product",
-        "link": "https://amzn.to/another-link"
+        "link": "https://amzn.to/another-link",
+        "image": "https://example.com/another-image.jpg"
       }
     ],
     "B": [...]
@@ -77,6 +79,9 @@ Each product must have:
 - **name**: Product name
 - **review**: Short review/description
 - **link**: Affiliate link URL
+
+Each product may optionally have:
+- **image**: Product image URL (displays as thumbnail in the tier list)
 
 ## Optional Fields
 

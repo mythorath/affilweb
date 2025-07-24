@@ -170,6 +170,11 @@ function validateInput(data) {
       if (!product.name || !product.review || !product.link) {
         throw new Error(`Each product must have name, review, and link. Missing in tier "${tierName}"`);
       }
+      
+      // Validate image field if present (must be a string)
+      if (product.image !== undefined && typeof product.image !== 'string') {
+        throw new Error(`Product image must be a string URL. Invalid in tier "${tierName}" for product "${product.name}"`);
+      }
     }
   }
   
