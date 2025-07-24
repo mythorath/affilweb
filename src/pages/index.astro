@@ -3,9 +3,18 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 // Fetch all tier list entries
-const tierListPosts = await getCollection('tierlists');
+const allTierListPosts = await getCollection('tierlists');
 
-// Sort by publication date (newest first)
+// Filter out demo files in production and sort by publication date (newest first)
+const tierListPosts = allTierListPosts
+  .filter(post => {
+    // Filter out demo files (those starting with 'demo-' in filename or slug)
+    const isDemoFile = post.id.startsWith('demo-') || 
+                       (post.data.slug && post.data.slug.startsWith('demo-')) ||
+                       post.data.title.toLowerCase().includes('demo');
+    return !isDemoFile;
+  });
+
 const sortedPosts = tierListPosts.sort((a, b) => 
   new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
@@ -81,40 +90,45 @@ const sortedPosts = tierListPosts.sort((a, b) =>
       <h2 class="text-3xl font-bold mb-8 text-center">Latest Tier Lists</h2>
       
       <div class="max-w-3xl mx-auto">
-        {sortedPosts.map((post) => (
-          <article class="mb-4 p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-lg font-semibold mb-2">
-              <a 
-                href={`/${post.slug}`} 
-                class="text-blue-600 hover:underline hover:text-blue-800"
-              >
-                {post.data.title}
-              </a>
-            </h3>
-            
-            <time class="text-gray-600 text-sm mb-3 block">
-              {new Date(post.data.pubDate).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </time>
-            
-            <p class="text-gray-600 leading-relaxed">
-              {post.data.description}
-            </p>
-            
-            {post.data.tags && post.data.tags.length > 0 && (
-              <div class="mt-3 flex flex-wrap gap-2">
-                {post.data.tags.map((tag) => (
-                  <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </article>
-        ))}
+        {sortedPosts.map((post) => {
+          // Use explicit slug from frontmatter if available, otherwise fallback to filename (without .mdx)
+          const postSlug = post.data.slug || post.slug;
+          
+          return (
+            <article class="mb-4 p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+              <h3 class="text-lg font-semibold mb-2">
+                <a 
+                  href={`/${postSlug}`} 
+                  class="text-blue-600 hover:underline hover:text-blue-800"
+                >
+                  {post.data.title}
+                </a>
+              </h3>
+              
+              <time class="text-gray-600 text-sm mb-3 block">
+                {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+              
+              <p class="text-gray-600 leading-relaxed">
+                {post.data.description}
+              </p>
+              
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="mt-3 flex flex-wrap gap-2">
+                  {post.data.tags.map((tag) => (
+                    <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </article>
+          );
+        })}
       </div>
     </div>
   </div>
