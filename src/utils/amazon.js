@@ -6,6 +6,7 @@
  */
 
 import * as cheerio from 'cheerio';
+import { fetchImageFromSerpAPI } from './imageSearch.js';
 
 /**
  * Converts a raw Amazon product URL or ASIN to an affiliate link
@@ -334,71 +335,31 @@ export async function fetchAmazonImagesBatch(asins, delay = 1000) {
 }
 
 /**
- * Search for product images using search engines, prioritizing retail domains
+ * Search for product images using SerpAPI (Google Images)
  * @param {string} productName - Product name to search for
  * @returns {Promise<{url: string|null, source: string}>} Image URL and source type
  */
 export async function fetchProductImageFromSearchEngine(productName) {
-  console.log(`🔍 Searching search engines for: "${productName}"`);
+  console.log(`🔍 [SerpAPI] Starting SerpAPI image search for: "${productName}"`);
   
-  // Try DuckDuckGo image search first (scraping approach for retail domains)
   try {
-    console.log(`🦆 Trying DuckDuckGo image search for: "${productName}"`);
+    const result = await fetchImageFromSerpAPI(productName);
     
-    const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(productName + ' product')}&t=h_&iax=images&ia=images`;
-    
-    const response = await fetch(searchUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      },
-      timeout: 10000
-    });
-
-    if (response.ok) {
-      const html = await response.text();
-      
-      // Look for high-quality images from preferred retail domains
-      const preferredDomains = [
-        'amazon.com', 'amazon.co.uk', 'bestbuy.com', 'newegg.com',
-        'logitech.com', 'corsair.com', 'razer.com', 'steelseries.com',
-        'hyperx.com', 'asus.com', 'msi.com', 'sony.com', 'apple.com',
-        'walmart.com', 'target.com', 'microcenter.com'
-      ];
-      
-      // Extract high-resolution image URLs
-      const imageRegex = /"(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp)(?:\?[^"]*)?)"[^>]*(?:width|height)="(?:500|800|1024|1200|1500|2000)/gi;
-      let match;
-      
-      while ((match = imageRegex.exec(html)) !== null) {
-        const imageUrl = match[1];
-        
-        // Prioritize images from retail domains
-        for (const domain of preferredDomains) {
-          if (imageUrl.includes(domain)) {
-            console.log(`✅ Found ${domain} image via search: ${imageUrl}`);
-            return { url: imageUrl, source: 'search_engine_retail' };
-          }
-        }
-      }
-      
-      // If no retail domain found, try any high-quality image
-      const anyImageMatch = html.match(/"(https?:\/\/[^"]+\.(?:jpg|jpeg|png)(?:\?[^"]*)?)"[^>]*(?:width|height)="(?:1024|1200|1500)/i);
-      
-      if (anyImageMatch) {
-        console.log(`✅ Found search engine image: ${anyImageMatch[1]}`);
-        return { url: anyImageMatch[1], source: 'search_engine' };
-      }
+    if (result.url) {
+      console.log(`✅ [SerpAPI] Found image via SerpAPI: ${result.url}`);
+      return result;
+    } else {
+      console.log(`❌ [SerpAPI] No image found via SerpAPI for: "${productName}"`);
+      return { url: null, source: 'serpapi_none' };
     }
   } catch (error) {
-    console.debug('DuckDuckGo image search failed:', error.message);
+    console.warn(`❌ [SerpAPI] Search failed for "${productName}":`, error.message);
+    return { url: null, source: 'serpapi_error' };
   }
-
-  // Return no result if search engine scraping fails
-  return { url: null, source: 'none' };
 }
 
 /**
- * Fetches a product image using DuckDuckGo Instant Answer API as a fallback
+ * Fetches a product image using multiple fallback APIs when Amazon fails
  * @param {string} productName - The product name to search for
  * @returns {Promise<{url: string|null, source: string}>} Image result with URL and source
  * 
@@ -417,21 +378,24 @@ export async function fetchProductImageFallback(productName) {
   console.log(`🔍 Searching for fallback image: "${productName}"`);
 
   try {
-    // Try search engines first for retail domain images
-    const searchResult = await fetchProductImageFromSearchEngine(productName);
-    if (searchResult.url) {
-      return searchResult;
+    // Priority 1: Try SerpAPI for retail domain images (best quality)
+    const serpApiResult = await fetchProductImageFromSearchEngine(productName);
+    if (serpApiResult.url) {
+      console.log(`✅ Found SerpAPI image: ${serpApiResult.url} (source: ${serpApiResult.source})`);
+      return serpApiResult;
     }
 
-    // Try DuckDuckGo Instant Answer API
+    // Priority 2: Try DuckDuckGo Instant Answer API (free but limited)
     const ddgImage = await searchDuckDuckGoImage(productName);
     if (ddgImage) {
+      console.log(`✅ Found DuckDuckGo API image: ${ddgImage}`);
       return { url: ddgImage, source: 'duckduckgo' };
     }
 
-    // Try alternative image search APIs
+    // Priority 3: Try alternative image search APIs (Unsplash, Wikipedia)
     const alternativeImage = await searchAlternativeImageAPI(productName);
-    if (alternativeImage) {
+    if (alternativeImage.url) {
+      console.log(`✅ Found alternative API image: ${alternativeImage.url} (source: ${alternativeImage.source})`);
       return alternativeImage;
     }
 

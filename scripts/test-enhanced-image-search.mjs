@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
+import dotenv from 'dotenv';
 import { 
   fetchProductImageFromSearchEngine,
   fetchProductImageFallback,
   fetchAmazonImage 
 } from '../src/utils/amazon.js';
+
+// Load environment variables
+dotenv.config();
 
 /**
  * Test the new search engine image fetching functionality
