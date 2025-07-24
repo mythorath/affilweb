@@ -30,19 +30,19 @@ const sortedPosts = tierListPosts.sort((a, b) =>
       <div class="bg-white p-6 rounded-lg shadow-sm border">
         <h3 class="text-xl font-semibold mb-4">🎮 Gaming</h3>
         <p class="text-gray-600 mb-4">Headsets, keyboards, mice, and gaming accessories ranked by performance.</p>
-        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
+        <a href="/best-gaming-mice-2025" class="text-blue-600 hover:text-blue-800 font-medium">View Gaming Mice →</a>
       </div>
       
       <div class="bg-white p-6 rounded-lg shadow-sm border">
         <h3 class="text-xl font-semibold mb-4">💻 Tech</h3>
         <p class="text-gray-600 mb-4">Laptops, phones, and gadgets tested for value and performance.</p>
-        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
+        <a href="/best-budget-laptops-2025" class="text-blue-600 hover:text-blue-800 font-medium">View Budget Laptops →</a>
       </div>
       
       <div class="bg-white p-6 rounded-lg shadow-sm border">
         <h3 class="text-xl font-semibold mb-4">🏠 Lifestyle</h3>
         <p class="text-gray-600 mb-4">Home, fitness, and everyday products ranked for quality and value.</p>
-        <a href="/demo" class="text-blue-600 hover:text-blue-800 font-medium">View Demo →</a>
+        <a href="/best-ergonomic-office-chairs-2025" class="text-blue-600 hover:text-blue-800 font-medium">View Office Chairs →</a>
       </div>
     </div>
     
@@ -85,7 +85,7 @@ const sortedPosts = tierListPosts.sort((a, b) =>
           <article class="mb-4 p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-lg font-semibold mb-2">
               <a 
-                href={`/${post.data.slug}`} 
+                href={`/${post.slug}`} 
                 class="text-blue-600 hover:underline hover:text-blue-800"
               >
                 {post.data.title}
