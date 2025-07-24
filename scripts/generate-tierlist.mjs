@@ -208,7 +208,7 @@ async function generateTierlistContent(products, category) {
   console.log('🤖 Step 4: Generating tierlist content with OpenAI...');
   
   try {
-    const prompt = `You are an expert product reviewer creating a comprehensive tier list for "${category}".
+    const prompt = `You are an expert product reviewer creating a comprehensive tier list for "${category}". Write in an engaging, authoritative tone that builds trust with readers.
 
 Here are the products to rank and review:
 
@@ -217,32 +217,39 @@ Specs: ${p.specs}
 Reviews: ${p.reviews}
 `).join('\n')}
 
-Please create a tier list ranking these products into S, A, and B tiers based on:
+Create a tier list ranking these products into S, A, and B tiers based on:
 - Performance and quality
-- Value for money
+- Value for money 
 - User satisfaction
 - Build quality and features
+- Category-specific criteria
 
-For each product, write a concise 1-2 sentence review explaining why it's in that tier.
+For each product, write a detailed 2-3 sentence review that:
+- Explains specific strengths and features
+- Justifies the tier placement
+- Uses technical details and user benefits
+- Maintains an expert, trustworthy tone
 
 Also generate:
-1. A catchy title for this tier list
-2. A compelling 2-sentence description for SEO
-3. A 3-4 sentence introduction paragraph
-4. A brief summary paragraph
-5. Relevant tags (5-7 tags)
+1. A compelling, SEO-optimized title (include year 2025)
+2. A 2-sentence meta description for search engines
+3. A 3-4 sentence introduction that hooks readers and establishes expertise
+4. A comprehensive 3-4 sentence summary that wraps up the guide
+5. 6-8 relevant SEO tags including the main category
+
+Make the content authoritative yet accessible. Focus on helping readers make informed purchasing decisions.
 
 Format your response as JSON:
 {
-  "title": "...",
-  "description": "...",
-  "introduction": "...",
-  "summary": "...",
-  "tags": ["tag1", "tag2", ...],
+  "title": "Best [Category] 2025 - Expert Tier List & Buying Guide",
+  "description": "Two sentence SEO description under 160 characters...",
+  "introduction": "Multi-sentence introduction that establishes authority and hooks the reader...",
+  "summary": "Comprehensive summary that reinforces the value and guides next steps...",
+  "tags": ["primary-category", "secondary-category", "year", "guide-type", "audience", "feature"],
   "tiers": {
-    "S": [{"name": "Product Name", "review": "Review text"}],
-    "A": [{"name": "Product Name", "review": "Review text"}],
-    "B": [{"name": "Product Name", "review": "Review text"}]
+    "S": [{"name": "Exact Product Name", "review": "Detailed 2-3 sentence review with specific features and benefits"}],
+    "A": [{"name": "Exact Product Name", "review": "Detailed 2-3 sentence review with specific features and benefits"}],
+    "B": [{"name": "Exact Product Name", "review": "Detailed 2-3 sentence review with specific features and benefits"}]
   }
 }`;
 
@@ -250,8 +257,8 @@ Format your response as JSON:
       model: "gpt-4",
       messages: [
         {
-          role: "system",
-          content: "You are an expert product reviewer who creates detailed, honest tier lists. Always provide balanced, informative reviews."
+          role: "system", 
+          content: "You are an expert product reviewer who creates detailed, trustworthy tier lists. Write comprehensive reviews that help readers make informed purchasing decisions. Use specific technical details and real-world benefits. Maintain an authoritative yet approachable tone throughout."
         },
         {
           role: "user",
@@ -259,7 +266,7 @@ Format your response as JSON:
         }
       ],
       temperature: 0.7,
-      max_tokens: 2000
+      max_tokens: 3000
     });
 
     const content = JSON.parse(completion.choices[0].message.content);
@@ -274,16 +281,24 @@ Format your response as JSON:
 }
 
 /**
- * Step 5: Create Amazon affiliate links
+ * Step 5: Create Amazon affiliate links with proper ASIN format
  */
-function createAffiliateLink(productName) {
-  // Create a simple Amazon search link with affiliate tag
+function createAffiliateLink(productName, amazonUrl = null) {
+  if (amazonUrl) {
+    // Extract ASIN from existing Amazon URL if available
+    const asinMatch = amazonUrl.match(/\/dp\/([A-Z0-9]{10})/);
+    if (asinMatch) {
+      return `https://www.amazon.com/dp/${asinMatch[1]}?tag=${CONFIG.amazonTag}`;
+    }
+  }
+  
+  // Fallback to Amazon search with affiliate tag
   const searchQuery = productName.replace(/\s+/g, '+');
   return `https://www.amazon.com/s?k=${searchQuery}&tag=${CONFIG.amazonTag}`;
 }
 
 /**
- * Step 6: Generate MDX file content
+ * Step 6: Generate MDX file content using pagetemplate.md format
  */
 function generateMDXContent(content, products) {
   console.log('📝 Step 5: Generating MDX file content...');
@@ -296,81 +311,101 @@ function generateMDXContent(content, products) {
   
   const currentDate = new Date().toISOString().split('T')[0];
   
-  // Map generated tiers to products with additional data
-  const enrichedTiers = {};
+  // Get the hero image from the first S-tier product or use CDN placeholder
+  const heroProduct = content.tiers.S?.[0]?.name || content.tiers.A?.[0]?.name || 'hero';
+  const heroSlug = heroProduct.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+  const heroImage = `https://cdn.trendtiers.com/images/${heroSlug}.jpg`;
   
-  Object.keys(content.tiers).forEach(tier => {
-    let tierLabel;
-    if (tier === 'S') {
-      tierLabel = 'Top Picks';
-    } else if (tier === 'A') {
-      tierLabel = 'Great Options';
-    } else {
-      tierLabel = 'Budget Choices';
-    }
-    
-    enrichedTiers[tier] = {
-      label: tierLabel,
-      products: content.tiers[tier].map(product => {
-        const originalProduct = products.find(p => 
-          p.name.toLowerCase().includes(product.name.toLowerCase()) ||
-          product.name.toLowerCase().includes(p.name.toLowerCase())
-        );
-        
-        return {
-          name: product.name,
-          image: originalProduct?.image || `https://via.placeholder.com/300x200?text=${encodeURIComponent(product.name)}`,
-          link: originalProduct?.amazonUrl || createAffiliateLink(product.name),
-          review: product.review
-        };
-      })
-    };
-  });
+  // Generate tier arrays in the template format
+  const generateTierArray = (tierProducts) => {
+    return tierProducts.map(product => {
+      const originalProduct = products.find(p => 
+        p.name.toLowerCase().includes(product.name.toLowerCase()) ||
+        product.name.toLowerCase().includes(p.name.toLowerCase())
+      );
+      
+      // Use CDN-style image naming convention
+      const imageSlug = product.name.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-');
+      
+      return {
+        name: product.name,
+        review: product.review,
+        link: originalProduct?.amazonUrl || createAffiliateLink(product.name, originalProduct?.amazonUrl),
+        image: originalProduct?.image || `https://cdn.trendtiers.com/images/${imageSlug}.jpg`
+      };
+    });
+  };
+  
+  // Generate category-specific criteria
+  const categoryKeywords = content.tags.join(' ').toLowerCase();
+  let criteriaSection = '';
+  
+  if (categoryKeywords.includes('gaming')) {
+    criteriaSection = `- **Performance**: Low latency and high-quality audio
+- **Comfort**: Extended gaming session comfort
+- **Build Quality**: Durable construction for daily use
+- **Features**: Mic quality and gaming-specific features
+- **Value**: Price-to-performance ratio`;
+  } else if (categoryKeywords.includes('fitness') || categoryKeywords.includes('workout')) {
+    criteriaSection = `- **Fit & Comfort**: Ear hooks, wing tips, or customizable eartips
+- **Sweat & Water Resistance**: Minimum IPX5 recommended
+- **Battery Life**: 6+ hours on a single charge
+- **Sound Quality**: Bass-forward tuning helps during intense exercise
+- **Durability**: Drop and water resistance for gym bags and running`;
+  } else if (categoryKeywords.includes('wireless') || categoryKeywords.includes('headphones')) {
+    criteriaSection = `- **Sound Quality**: Balanced audio with clear highs and deep bass
+- **Battery Life**: All-day usage without frequent charging
+- **Comfort**: Lightweight design for extended wear
+- **Connectivity**: Stable Bluetooth connection
+- **Features**: Noise cancellation and smart controls`;
+  } else {
+    criteriaSection = `- **Performance**: Overall quality and reliability
+- **Value for Money**: Best bang for your buck
+- **User Reviews**: Real-world satisfaction ratings
+- **Build Quality**: Construction and materials
+- **Features**: Useful functionality and innovation`;
+  }
   
   const mdxContent = `---
 title: "${content.title}"
 description: "${content.description}"
-slug: "${slug}"
 pubDate: ${currentDate}
+slug: "${slug}"
 tags: ${JSON.stringify(content.tags)}
-image: "/images/${slug}-hero.webp"
+image: "${heroImage}"
 ---
 
-import TierList from '../../components/TierList.astro'
+import TierList from "@/components/TierList"
 
 # ${content.title}
 
 ${content.introduction}
 
-<TierList
-  category="${content.tags[0] || 'products'}"
-  tiers={${JSON.stringify(enrichedTiers, null, 4)}}
-/>
+---
 
-## 🎯 What We Looked For
+## 🧪 What We Looked For
 
-- Performance and reliability
-- Value for money
-- User reviews and satisfaction
-- Build quality and features
-- Long-term durability
+${criteriaSection}
+
+---
 
 ## 📦 Summary
 
 ${content.summary}
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "${content.title}",
-  "itemListElement": [
-    ${Object.values(content.tiers).flat().map((product, index) => 
-      `{ "@type": "Product", "name": "${product.name}", "position": ${index + 1} }`
-    ).join(',\n    ')}
-  ]
-}
-</script>`;
+---
+
+<TierList 
+  s={${JSON.stringify(generateTierArray(content.tiers.S || []), null, 4)}}
+  a={${JSON.stringify(generateTierArray(content.tiers.A || []), null, 4)}}
+  b={${JSON.stringify(generateTierArray(content.tiers.B || []), null, 4)}}
+/>
+
+---
+
+*Affiliate Disclosure: This post contains affiliate links. We may earn a commission if you make a purchase through these links at no additional cost to you.*`;
 
   return { mdxContent, slug };
 }
