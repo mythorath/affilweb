@@ -122,6 +122,7 @@ const sortedPosts = tierListPosts.sort((a, b) =>
               pubDate={post.data.pubDate}
               slug={postSlug}
               tags={post.data.tags}
+              post={post}
             />
           );
         })}

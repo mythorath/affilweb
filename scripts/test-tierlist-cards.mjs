@@ -27,7 +27,9 @@ async function testTierListCards() {
       // Check for key features
       const features = {
         'TypeScript Props Interface': componentContent.includes('export interface Props'),
-        'Image Fallback Support': componentContent.includes('fallbackImage'),
+        'Enhanced Image Fallback': componentContent.includes('post?.data?.image') && componentContent.includes('post?.data?.products?.[0]?.image'),
+        'Product Image Priority': componentContent.includes('products?.[0]?.image'),
+        'Post Object Support': componentContent.includes('post?: any'),
         'Responsive Design': componentContent.includes('md:') && componentContent.includes('lg:'),
         'Hover Effects': componentContent.includes('group-hover:'),
         'Loading Lazy': componentContent.includes('loading="lazy"'),
@@ -67,31 +69,50 @@ async function testTierListCards() {
       console.log(`   ${exists ? '✅' : '❌'} ${feature}`);
     });
     
-    // Simulate tier list data
-    console.log('\n📊 Sample Card Data:');
+    // Simulate tier list data with enhanced image fallback scenarios
+    console.log('\n📊 Enhanced Image Fallback Test Cases:');
     const sampleCards = [
       {
-        title: 'Best Gaming Mice 2025',
-        description: 'Top gaming mice ranked by performance, features, and value',
-        image: '/images/gaming-mice.jpg',
-        tags: ['gaming', 'mice', 'peripherals'],
-        pubDate: '2025-07-23'
+        scenario: 'Frontmatter Override',
+        data: {
+          image: '/images/custom-override.jpg', // Priority 1: Frontmatter override
+          products: [{ image: '/images/product-1.jpg' }]
+        },
+        expectedImage: '/images/custom-override.jpg'
       },
       {
-        title: 'Best Budget Laptops 2025',
-        description: 'Top budget laptops ranked by value, performance, and build quality',
-        image: null, // Test fallback
-        tags: ['laptops', 'budget', 'tech'],
-        pubDate: '2025-07-22'
+        scenario: 'First Product Image',
+        data: {
+          image: null,
+          products: [
+            { image: '/images/gaming-mouse-1.jpg' }, // Priority 2: First product
+            { image: '/images/gaming-mouse-2.jpg' }
+          ]
+        },
+        expectedImage: '/images/gaming-mouse-1.jpg'
+      },
+      {
+        scenario: 'Fallback to Placeholder',
+        data: {
+          image: null,
+          products: [] // No products
+        },
+        expectedImage: '/images/placeholder-tierlist.svg'
+      },
+      {
+        scenario: 'No Products Array',
+        data: {
+          image: null,
+          products: null
+        },
+        expectedImage: '/images/placeholder-tierlist.svg'
       }
     ];
     
-    sampleCards.forEach((card, index) => {
-      console.log(`   Card ${index + 1}:`);
-      console.log(`     Title: ${card.title}`);
-      console.log(`     Image: ${card.image || 'Using fallback SVG'}`);
-      console.log(`     Tags: ${card.tags.join(', ')}`);
-      console.log(`     Date: ${new Date(card.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`);
+    sampleCards.forEach((testCase, index) => {
+      console.log(`   Test ${index + 1}: ${testCase.scenario}`);
+      console.log(`     Expected: ${testCase.expectedImage}`);
+      console.log(`     Logic: post.data.image || post.data.products?.[0]?.image || fallback`);
       console.log('');
     });
     

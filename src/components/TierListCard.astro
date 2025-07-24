@@ -6,9 +6,10 @@ export interface Props {
   pubDate: string | Date;
   slug: string;
   tags?: string[];
+  post?: any; // Optional post object for enhanced image fallback
 }
 
-const { title, description, image, pubDate, slug, tags } = Astro.props;
+const { title, description, image, pubDate, slug, tags, post } = Astro.props;
 
 // Format date
 const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
@@ -17,9 +18,19 @@ const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
   day: 'numeric'
 });
 
-// Fallback image for missing images
-const fallbackImage = '/images/placeholder-tierlist.svg';
-const displayImage = image || fallbackImage;
+// ✅ Enhanced image fallback logic
+// Priority:
+// 1. post.data.image (frontmatter override)
+// 2. First product image in post.data.products[0].image  
+// 3. image prop (backward compatibility)
+// 4. Placeholder SVG
+const productImage = 
+  post?.data?.image || 
+  post?.data?.products?.[0]?.image || 
+  image || 
+  '/images/placeholder-tierlist.svg';
+
+const displayImage = productImage;
 
 // Truncate description for card display
 const truncatedDescription = description?.length > 120 
