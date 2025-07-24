@@ -1,0 +1,49 @@
+{
+  "products": [
+    {
+      "name": "Herman Miller Aeron Chair",
+      "price": "$1,395",
+      "description": "Iconic ergonomic office chair with breathable mesh design and advanced PostureFit SL support",
+      "features": [
+        "PostureFit SL lumbar support",
+        "Breathable mesh material",
+        "Adjustable armrests",
+        "Tilt limiter and seat angle adjustment",
+        "12-year warranty"
+      ],
+      "brand": "Herman Miller"
+    },
+    {
+      "name": "Steelcase Leap V2",
+      "price": "$415-$865",
+      "description": "Highly adjustable task chair designed to support the natural movement of your spine",
+      "features": [
+        "LiveBack technology",
+        "4-way adjustable armrests",
+        "Seat depth adjustment",
+        "Natural glide system",
+        "Weight-activated mechanism"
+      ],
+      "brand": "Steelcase"
+    },
+    {
+      "name": "Secretlab TITAN Evo 2022",
+      "price": "$519",
+      "description": "Premium gaming chair with cold-cure foam and magnetic head pillow",
+      "features": [
+        "Cold-cure foam padding",
+        "Magnetic memory foam head pillow",
+        "4-way L-ADAPT lumbar support",
+        "Multi-tilt mechanism",
+        "NEO Hybrid Leatherette upholstery"
+      ],
+      "brand": "Secretlab"
+    }
+  ],
+  "options": {
+    "category": "ergonomic office chairs",
+    "wordCount": "200-250",
+    "tone": "professional and helpful",
+    "includeAffiliate": true
+  }
+}
