@@ -398,9 +398,9 @@ ${content.summary}
 ---
 
 <TierList 
-  s={${JSON.stringify(generateTierArray(content.tiers.S || []), null, 4)}}
-  a={${JSON.stringify(generateTierArray(content.tiers.A || []), null, 4)}}
-  b={${JSON.stringify(generateTierArray(content.tiers.B || []), null, 4)}}
+  s={${JSON.stringify(generateTierArray(content.tiers.S || []), null, 4).replace(/^/gm, '    ')}}
+  a={${JSON.stringify(generateTierArray(content.tiers.A || []), null, 4).replace(/^/gm, '    ')}}
+  b={${JSON.stringify(generateTierArray(content.tiers.B || []), null, 4).replace(/^/gm, '    ')}}
 />
 
 ---
