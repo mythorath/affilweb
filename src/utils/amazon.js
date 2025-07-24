@@ -5,6 +5,8 @@
  * with the mythorath-20 tracking ID.
  */
 
+import * as cheerio from 'cheerio';
+
 /**
  * Converts a raw Amazon product URL or ASIN to an affiliate link
  * @param {string} urlOrASIN - Either a full Amazon URL or just an ASIN
@@ -144,6 +146,22 @@ export async function fetchAmazonImage(asin) {
     console.warn(`Failed to scrape image for ASIN ${asin}:`, error.message);
   }
 
+  // Last resort: Try fallback image search if we have a product name
+  // This would require the product name to be passed or derived from ASIN
+  console.log(`🔄 Attempting fallback image search for ASIN: ${asin}`);
+  try {
+    // Try to get product name from Amazon first, then search for images
+    const productName = await getProductNameFromASIN(asin);
+    if (productName) {
+      const fallbackImage = await fetchProductImageFallback(productName);
+      if (fallbackImage) {
+        return fallbackImage;
+      }
+    }
+  } catch (error) {
+    console.warn(`Fallback image search failed for ASIN ${asin}:`, error.message);
+  }
+
   console.warn(`❌ No image found for ASIN: ${asin}`);
   return null;
 }
@@ -158,48 +176,122 @@ async function scrapeAmazonProductImage(asin) {
   try {
     const productUrl = `https://www.amazon.com/dp/${asin}`;
     
-    // Note: In a real implementation, you might want to use a proper web scraping
-    // service or API to avoid being blocked by Amazon's anti-bot measures
+    console.log(`🔍 Scraping Amazon product page for ASIN: ${asin}`);
+    
+    // Fetch the product page with browser-like headers
     const response = await fetch(productUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
       },
-      timeout: 10000,
+      timeout: 15000, // 15 second timeout for full page load
     });
 
     if (!response.ok) {
+      console.warn(`Failed to fetch Amazon page for ${asin}: ${response.status} ${response.statusText}`);
       return null;
     }
 
     const html = await response.text();
+    const $ = cheerio.load(html);
     
-    // Look for common image selectors in Amazon product pages
-    const imagePatterns = [
-      // Main product image
-      /"hiRes":"([^"]+)"/,
-      /"large":"([^"]+)"/,
-      // Alternative image data
-      /data-old-hires="([^"]+)"/,
-      /data-a-dynamic-image="[^"]*"([^"]+)":\[/,
+    // Strategy 1: Look for the main landing image
+    const landingImage = $('#landingImage').attr('src');
+    if (landingImage && landingImage.startsWith('https://')) {
+      console.log(`✅ Found landing image for ASIN ${asin}: ${landingImage}`);
+      return landingImage;
+    }
+
+    // Strategy 2: Look for images with data-a-dynamic-image attribute
+    let largestImageUrl = null;
+    let largestImageSize = 0;
+
+    $('img[data-a-dynamic-image]').each((index, element) => {
+      const dynamicImageData = $(element).attr('data-a-dynamic-image');
+      if (dynamicImageData) {
+        try {
+          // Parse the JSON data which contains image URLs and their dimensions
+          const imageData = JSON.parse(dynamicImageData);
+          
+          // Find the image with the largest dimensions
+          for (const [imageUrl, dimensions] of Object.entries(imageData)) {
+            if (Array.isArray(dimensions) && dimensions.length >= 2) {
+              const width = dimensions[0];
+              const height = dimensions[1];
+              const imageSize = width * height;
+              
+              if (imageSize > largestImageSize && imageUrl.startsWith('https://')) {
+                largestImageSize = imageSize;
+                largestImageUrl = imageUrl;
+              }
+            }
+          }
+        } catch (parseError) {
+          console.debug(`Failed to parse dynamic image data: ${parseError.message}`);
+        }
+      }
+    });
+
+    if (largestImageUrl) {
+      console.log(`✅ Found dynamic image for ASIN ${asin}: ${largestImageUrl} (${largestImageSize}px)`);
+      return largestImageUrl;
+    }
+
+    // Strategy 3: Look for any high-resolution images in the page
+    const imageSelectors = [
+      'img[data-old-hires]',
+      'img[src*="._AC_SL1500_"]',
+      'img[src*="._AC_SL1000_"]',
+      'img[src*="images-na.ssl-images-amazon.com"]',
+      'img[src*="m.media-amazon.com"]'
     ];
 
-    for (const pattern of imagePatterns) {
-      const match = html.match(pattern);
-      if (match && match[1]) {
-        const imageUrl = match[1].replace(/\\u[\dA-F]{4}/gi, (match) => {
-          return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
-        });
-        
-        // Validate the extracted URL
-        if (imageUrl.startsWith('https://') && imageUrl.includes('amazon')) {
-          console.log(`✅ Scraped Amazon image for ASIN ${asin}: ${imageUrl}`);
+    for (const selector of imageSelectors) {
+      const $img = $(selector).first();
+      if ($img.length) {
+        const imageUrl = $img.attr('src') || $img.attr('data-old-hires');
+        if (imageUrl && imageUrl.startsWith('https://') && imageUrl.includes('amazon')) {
+          console.log(`✅ Found fallback image for ASIN ${asin}: ${imageUrl}`);
           return imageUrl;
         }
       }
     }
 
+    // Strategy 4: Regex fallback for JSON-embedded image URLs
+    const regexPatterns = [
+      /"hiRes":"([^"]+)"/,
+      /"large":"([^"]+)"/,
+      /"main":{"[^"]*":"([^"]+)"/,
+    ];
+
+    for (const pattern of regexPatterns) {
+      const match = html.match(pattern);
+      if (match && match[1]) {
+        let imageUrl = match[1];
+        
+        // Decode any escaped characters
+        imageUrl = imageUrl.replace(/\\u[\dA-F]{4}/gi, (match) => {
+          return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+        });
+        
+        // Decode other escape sequences
+        imageUrl = imageUrl.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+        
+        if (imageUrl.startsWith('https://') && imageUrl.includes('amazon')) {
+          console.log(`✅ Found regex image for ASIN ${asin}: ${imageUrl}`);
+          return imageUrl;
+        }
+      }
+    }
+
+    console.warn(`❌ No suitable image found in Amazon page for ASIN: ${asin}`);
     return null;
+
   } catch (error) {
     console.warn(`Scraping failed for ASIN ${asin}:`, error.message);
     return null;
@@ -237,4 +329,321 @@ export async function fetchAmazonImagesBatch(asins, delay = 1000) {
   }
   
   return results;
+}
+
+/**
+ * Fetches a product image using DuckDuckGo Instant Answer API as a fallback
+ * @param {string} productName - The product name to search for
+ * @returns {Promise<string|null>} Image URL or null if not found
+ * 
+ * @example
+ * const imageUrl = await fetchProductImageFallback('Steelcase Leap V2 Chair');
+ * if (imageUrl) {
+ *   console.log('Found fallback image:', imageUrl);
+ * }
+ */
+export async function fetchProductImageFallback(productName) {
+  if (!productName || typeof productName !== 'string') {
+    console.warn('Invalid product name provided for fallback image search');
+    return null;
+  }
+
+  console.log(`🔍 Searching for fallback image: "${productName}"`);
+
+  try {
+    // Try DuckDuckGo Instant Answer API first
+    const ddgImage = await searchDuckDuckGoImage(productName);
+    if (ddgImage) {
+      return ddgImage;
+    }
+
+    // Try alternative image search APIs
+    const alternativeImage = await searchAlternativeImageAPI(productName);
+    if (alternativeImage) {
+      return alternativeImage;
+    }
+
+    console.log(`❌ No fallback image found for: "${productName}"`);
+    return null;
+
+  } catch (error) {
+    console.warn(`Fallback image search failed for "${productName}":`, error.message);
+    return null;
+  }
+}
+
+/**
+ * Search for product images using DuckDuckGo Instant Answer API
+ * @private
+ * @param {string} productName - Product name to search
+ * @returns {Promise<string|null>} Image URL or null
+ */
+async function searchDuckDuckGoImage(productName) {
+  try {
+    // DuckDuckGo Instant Answer API
+    const query = encodeURIComponent(`${productName} product`);
+    const ddgUrl = `https://api.duckduckgo.com/?q=${query}&format=json&no_html=1&skip_disambig=1`;
+    
+    console.log(`🦆 Trying DuckDuckGo API for: "${productName}"`);
+    
+    const response = await fetch(ddgUrl, {
+      headers: {
+        'User-Agent': 'TrendTiers.com Image Fetcher 1.0',
+      },
+      timeout: 10000,
+    });
+
+    if (!response.ok) {
+      console.debug(`DuckDuckGo API returned: ${response.status}`);
+      return null;
+    }
+
+    const data = await response.json();
+    
+    // Check for instant answer image
+    if (data.Image && data.Image.startsWith('https://')) {
+      console.log(`✅ Found DuckDuckGo instant answer image: ${data.Image}`);
+      return data.Image;
+    }
+
+    // Check for related topics with images
+    if (data.RelatedTopics && Array.isArray(data.RelatedTopics)) {
+      for (const topic of data.RelatedTopics) {
+        if (topic.Icon && topic.Icon.URL && topic.Icon.URL.startsWith('https://')) {
+          // Filter out generic icons
+          if (!topic.Icon.URL.includes('duckduckgo.com') && 
+              !topic.Icon.URL.includes('icon') && 
+              topic.Icon.Width > 50) {
+            console.log(`✅ Found DuckDuckGo related topic image: ${topic.Icon.URL}`);
+            return topic.Icon.URL;
+          }
+        }
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.debug(`DuckDuckGo search failed: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Search for product images using alternative APIs
+ * @private
+ * @param {string} productName - Product name to search
+ * @returns {Promise<string|null>} Image URL or null
+ */
+async function searchAlternativeImageAPI(productName) {
+  try {
+    // Try Unsplash API for product-related images (requires API key but has free tier)
+    const unsplashImage = await searchUnsplashImage(productName);
+    if (unsplashImage) {
+      return unsplashImage;
+    }
+
+    // Try Wikipedia/Wikidata API for product images
+    const wikipediaImage = await searchWikipediaImage(productName);
+    if (wikipediaImage) {
+      return wikipediaImage;
+    }
+
+    return null;
+  } catch (error) {
+    console.debug(`Alternative image search failed: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Search Unsplash for product-related images
+ * @private
+ * @param {string} productName - Product name to search
+ * @returns {Promise<string|null>} Image URL or null
+ */
+async function searchUnsplashImage(productName) {
+  try {
+    // Extract key terms for better search results
+    const searchTerms = productName
+      .toLowerCase()
+      .replace(/\b(chair|mouse|keyboard|headset|laptop)\b/g, '$1')
+      .split(' ')
+      .filter(term => term.length > 2)
+      .slice(0, 3) // Use first 3 relevant terms
+      .join(' ');
+
+    const query = encodeURIComponent(searchTerms);
+    
+    // Note: This would require an Unsplash API key in production
+    // For now, we'll use their public search endpoint (limited)
+    const unsplashUrl = `https://unsplash.com/napi/search/photos?query=${query}&per_page=1`;
+    
+    console.log(`📸 Trying Unsplash search for: "${searchTerms}"`);
+    
+    const response = await fetch(unsplashUrl, {
+      headers: {
+        'User-Agent': 'TrendTiers.com Image Fetcher 1.0',
+      },
+      timeout: 8000,
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    
+    if (data.results && data.results.length > 0) {
+      const image = data.results[0];
+      if (image.urls && image.urls.regular) {
+        console.log(`✅ Found Unsplash image: ${image.urls.regular}`);
+        return image.urls.regular;
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.debug(`Unsplash search failed: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Search Wikipedia for product images
+ * @private
+ * @param {string} productName - Product name to search
+ * @returns {Promise<string|null>} Image URL or null
+ */
+async function searchWikipediaImage(productName) {
+  try {
+    const query = encodeURIComponent(productName);
+    const wikipediaUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${query}`;
+    
+    console.log(`📖 Trying Wikipedia search for: "${productName}"`);
+    
+    const response = await fetch(wikipediaUrl, {
+      headers: {
+        'User-Agent': 'TrendTiers.com Image Fetcher 1.0',
+      },
+      timeout: 8000,
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    
+    if (data.originalimage && data.originalimage.source) {
+      console.log(`✅ Found Wikipedia image: ${data.originalimage.source}`);
+      return data.originalimage.source;
+    }
+
+    return null;
+  } catch (error) {
+    console.debug(`Wikipedia search failed: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Attempts to get product name from ASIN by scraping Amazon page
+ * @private
+ * @param {string} asin - Product ASIN
+ * @returns {Promise<string|null>} Product name or null
+ */
+async function getProductNameFromASIN(asin) {
+  try {
+    const productUrl = `https://www.amazon.com/dp/${asin}`;
+    
+    const response = await fetch(productUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+      timeout: 10000,
+    });
+
+    if (!response.ok) {
+      console.debug(`Failed to fetch Amazon page for ${asin}: ${response.status} ${response.statusText}`);
+      return getBestGuessProductName(asin);
+    }
+
+    const html = await response.text();
+    
+    // Try to extract product title from Amazon page
+    const $ = cheerio.load(html);
+    
+    // Common selectors for product titles
+    const titleSelectors = [
+      '#productTitle',
+      '[data-testid="product-title"]',
+      '.product-title',
+      'h1 span',
+      'h1.a-color-base'
+    ];
+
+    for (const selector of titleSelectors) {
+      const title = $(selector).first().text().trim();
+      if (title && title.length > 5) {
+        console.log(`📝 Extracted product name: "${title}"`);
+        return title;
+      }
+    }
+
+    // Fallback: regex search for title patterns
+    const titlePatterns = [
+      /<title[^>]*>([^<]+)/i,
+      /"productTitle":"([^"]+)"/i,
+      /"title":"([^"]+)"/i,
+    ];
+
+    for (const pattern of titlePatterns) {
+      const match = html.match(pattern);
+      if (match && match[1] && match[1].length > 5) {
+        const title = match[1]
+          .replace(/Amazon\.com\s*:\s*/i, '')
+          .replace(/\s*-\s*Amazon\.com$/i, '')
+          .trim();
+        
+        if (title.length > 5 && !title.toLowerCase().includes('amazon')) {
+          console.log(`📝 Regex extracted product name: "${title}"`);
+          return title;
+        }
+      }
+    }
+
+    // If we got here, Amazon blocked us or no title found
+    return getBestGuessProductName(asin);
+  } catch (error) {
+    console.debug(`Failed to extract product name for ASIN ${asin}:`, error.message);
+    return getBestGuessProductName(asin);
+  }
+}
+
+/**
+ * Generate a best-guess product category based on ASIN patterns
+ * This helps with fallback image search when we can't scrape the actual product name
+ * @private
+ * @param {string} asin - Product ASIN
+ * @returns {string} Generic product category for search
+ */
+function getBestGuessProductName(asin) {
+  // Amazon ASINs often have patterns that correlate with product categories
+  const categoryGuesses = {
+    'B08': 'electronics headphones',
+    'B07': 'electronics wireless device', 
+    'B06': 'home office product',
+    'B05': 'book magazine',
+    'B04': 'computer accessories',
+    'B03': 'office chair furniture',
+    'B02': 'clothing fashion',
+    'B01': 'tools hardware',
+    'B00': 'popular product'
+  };
+  
+  const prefix = asin.substring(0, 3);
+  const guess = categoryGuesses[prefix] || 'consumer product';
+  
+  console.log(`📝 Best-guess product category: "${guess}" (based on ASIN ${asin})`);
+  return guess;
 }
