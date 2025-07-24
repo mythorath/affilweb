@@ -1,0 +1,51 @@
+{
+  "title": "Best Ergonomic Office Chairs 2025",
+  "description": "A definitive guide to the top ergonomic office chairs of 2025, ranked by comfort, build quality, adjustability, and value.",
+  "pubDate": "2025-07-24",
+  "image": "/images/ergonomic-office-chairs.jpg",
+  "tags": [
+    "office",
+    "chairs",
+    "ergonomics",
+    "2025",
+    "work-from-home"
+  ],
+  "tiers": {
+    "S": [
+      {
+        "name": "Herman Miller Aeron",
+        "review": "Industry gold standard. Breathable mesh, perfect lumbar support, and unmatched adjustability. A lifetime chair.",
+        "link": "https://amzn.to/herman-miller-aeron"
+      },
+      {
+        "name": "Steelcase Gesture",
+        "review": "Exceptional for all-day use. Supports a wide range of postures and devices. Premium build and smooth recline.",
+        "link": "https://amzn.to/steelcase-gesture"
+      }
+    ],
+    "A": [
+      {
+        "name": "Secretlab NeueChair",
+        "review": "Gaming DNA meets office function. Sleek aluminum frame, dense foam seat, and excellent lumbar tuning.",
+        "link": "https://amzn.to/secretlab-neuechair"
+      },
+      {
+        "name": "Autonomous ErgoChair Pro",
+        "review": "Highly adjustable at a mid-range price. Great for remote workers who value flexibility and comfort.",
+        "link": "https://amzn.to/ergochair-pro"
+      }
+    ],
+    "B": [
+      {
+        "name": "FlexiSpot OC3",
+        "review": "Budget-friendly but surprisingly supportive. Good for short-to-medium sessions with a minimal design.",
+        "link": "https://amzn.to/flexispot-oc3"
+      },
+      {
+        "name": "NOUHAUS Ergo3D",
+        "review": "Mesh design with decent lumbar support and tilt control. A solid entry-level ergonomic option.",
+        "link": "https://amzn.to/nouhaus-ergo3d"
+      }
+    ]
+  }
+}
