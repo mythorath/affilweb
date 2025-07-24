@@ -1,0 +1,34 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#f8fafc"/>
+  
+  <!-- Grid Pattern -->
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="300" fill="url(#grid)"/>
+  
+  <!-- Icon -->
+  <g transform="translate(200, 150)">
+    <!-- Trophy/Ranking Icon -->
+    <circle cx="0" cy="-10" r="25" fill="#3b82f6" opacity="0.1"/>
+    <path d="M-15 -20 L15 -20 L12 -5 L-12 -5 Z" fill="#3b82f6" opacity="0.3"/>
+    <rect x="-8" y="-5" width="16" height="20" fill="#3b82f6" opacity="0.4"/>
+    <rect x="-12" y="15" width="24" height="8" rx="2" fill="#3b82f6" opacity="0.2"/>
+    
+    <!-- S, A, B Tier Indicators -->
+    <text x="-25" y="35" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#ef4444">S</text>
+    <text x="0" y="35" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#22c55e">A</text>
+    <text x="25" y="35" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#3b82f6">B</text>
+  </g>
+  
+  <!-- Text -->
+  <text x="200" y="240" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#64748b">
+    Tier List Ranking
+  </text>
+  <text x="200" y="260" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">
+    Product Rankings & Reviews
+  </text>
+</svg>

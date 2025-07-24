@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TierListCard from '../components/TierListCard.astro';
 import { getCollection } from 'astro:content';
 
 // Fetch all tier list entries
@@ -26,32 +27,50 @@ const sortedPosts = tierListPosts.sort((a, b) =>
   slug=""
 >
   <div class="text-center">
-    <h1 class="text-4xl font-bold text-gray-900 mb-6">
-      Welcome to TrendTiers
+    <h1 class="text-5xl font-bold text-gray-900 mb-6 leading-tight">
+      Welcome to <span class="text-blue-600">TrendTiers</span>
     </h1>
     
-    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
       The ultimate destination for tier list product rankings. 
       We test, review, and rank the best products so you don't have to.
     </p>
     
-    <div class="grid md:grid-cols-3 gap-8 mt-12">
-      <div class="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 class="text-xl font-semibold mb-4">🎮 Gaming</h3>
-        <p class="text-gray-600 mb-4">Headsets, keyboards, mice, and gaming accessories ranked by performance.</p>
-        <a href="/best-gaming-mice-2025" class="text-blue-600 hover:text-blue-800 font-medium">View Gaming Mice →</a>
+    <div class="grid md:grid-cols-3 gap-8 mt-16">
+      <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="text-3xl mb-4">🎮</div>
+        <h3 class="text-xl font-semibold mb-4 text-gray-900">Gaming</h3>
+        <p class="text-gray-600 mb-6 leading-relaxed">Headsets, keyboards, mice, and gaming accessories ranked by performance.</p>
+        <a href="/best-gaming-mice-2025" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors">
+          View Gaming Mice 
+          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
       </div>
       
-      <div class="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 class="text-xl font-semibold mb-4">💻 Tech</h3>
-        <p class="text-gray-600 mb-4">Laptops, phones, and gadgets tested for value and performance.</p>
-        <a href="/best-budget-laptops-2025" class="text-blue-600 hover:text-blue-800 font-medium">View Budget Laptops →</a>
+      <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="text-3xl mb-4">💻</div>
+        <h3 class="text-xl font-semibold mb-4 text-gray-900">Tech</h3>
+        <p class="text-gray-600 mb-6 leading-relaxed">Laptops, phones, and gadgets tested for value and performance.</p>
+        <a href="/best-budget-laptops-2025" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors">
+          View Budget Laptops 
+          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
       </div>
       
-      <div class="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 class="text-xl font-semibold mb-4">🏠 Lifestyle</h3>
-        <p class="text-gray-600 mb-4">Home, fitness, and everyday products ranked for quality and value.</p>
-        <a href="/best-ergonomic-office-chairs-2025" class="text-blue-600 hover:text-blue-800 font-medium">View Office Chairs →</a>
+      <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="text-3xl mb-4">🏠</div>
+        <h3 class="text-xl font-semibold mb-4 text-gray-900">Lifestyle</h3>
+        <p class="text-gray-600 mb-6 leading-relaxed">Home, fitness, and everyday products ranked for quality and value.</p>
+        <a href="/best-ergonomic-office-chairs-2025" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors">
+          View Office Chairs 
+          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
       </div>
     </div>
     
@@ -89,47 +108,39 @@ const sortedPosts = tierListPosts.sort((a, b) =>
     <div class="mt-16 text-left">
       <h2 class="text-3xl font-bold mb-8 text-center">Latest Tier Lists</h2>
       
-      <div class="max-w-3xl mx-auto">
+      <!-- Responsive Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {sortedPosts.map((post) => {
           // Use explicit slug from frontmatter if available, otherwise fallback to filename (without .mdx)
           const postSlug = post.data.slug || post.slug;
           
           return (
-            <article class="mb-4 p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-              <h3 class="text-lg font-semibold mb-2">
-                <a 
-                  href={`/${postSlug}`} 
-                  class="text-blue-600 hover:underline hover:text-blue-800"
-                >
-                  {post.data.title}
-                </a>
-              </h3>
-              
-              <time class="text-gray-600 text-sm mb-3 block">
-                {new Date(post.data.pubDate).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
-              
-              <p class="text-gray-600 leading-relaxed">
-                {post.data.description}
-              </p>
-              
-              {post.data.tags && post.data.tags.length > 0 && (
-                <div class="mt-3 flex flex-wrap gap-2">
-                  {post.data.tags.map((tag) => (
-                    <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </article>
+            <TierListCard 
+              title={post.data.title}
+              description={post.data.description}
+              image={post.data.image}
+              pubDate={post.data.pubDate}
+              slug={postSlug}
+              tags={post.data.tags}
+            />
           );
         })}
       </div>
+      
+      <!-- Show More Button (if needed) -->
+      {sortedPosts.length > 6 && (
+        <div class="text-center mt-8">
+          <a 
+            href="/tierlists" 
+            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            View All Tier Lists
+            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      )}
     </div>
   </div>
 </Layout>

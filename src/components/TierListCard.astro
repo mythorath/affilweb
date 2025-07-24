@@ -1,0 +1,165 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  pubDate: string | Date;
+  slug: string;
+  tags?: string[];
+}
+
+const { title, description, image, pubDate, slug, tags } = Astro.props;
+
+// Format date
+const formattedDate = new Date(pubDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric'
+});
+
+// Fallback image for missing images
+const fallbackImage = '/images/placeholder-tierlist.svg';
+const displayImage = image || fallbackImage;
+
+// Truncate description for card display
+const truncatedDescription = description?.length > 120 
+  ? description.substring(0, 120) + '...' 
+  : description;
+---
+
+<article class="tierlist-card group">
+  <a href={`/${slug}`} class="block h-full">
+    <div class="card-container bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden h-full flex flex-col transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+      
+      <!-- Image Section -->
+      <div class="image-container relative overflow-hidden bg-gray-100">
+        <img 
+          src={displayImage}
+          alt={title}
+          class="tierlist-image w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+          onerror="this.src='/images/placeholder-tierlist.svg'"
+        />
+        
+        <!-- Date Badge -->
+        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-gray-700">
+          {formattedDate}
+        </div>
+      </div>
+      
+      <!-- Content Section -->
+      <div class="card-content p-6 flex-1 flex flex-col">
+        
+        <!-- Title -->
+        <h3 class="card-title text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+          {title}
+        </h3>
+        
+        <!-- Description -->
+        {truncatedDescription && (
+          <p class="card-description text-gray-600 text-sm leading-relaxed mb-4 flex-1">
+            {truncatedDescription}
+          </p>
+        )}
+        
+        <!-- Tags -->
+        {tags && tags.length > 0 && (
+          <div class="tags-container flex flex-wrap gap-2 mb-4">
+            {tags.slice(0, 3).map((tag) => (
+              <span class="tag inline-block px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
+                #{tag}
+              </span>
+            ))}
+            {tags.length > 3 && (
+              <span class="tag inline-block px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
+                +{tags.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
+        
+        <!-- Call to Action -->
+        <div class="cta-container mt-auto">
+          <div class="inline-flex items-center text-blue-600 font-medium text-sm group-hover:text-blue-700 transition-colors">
+            <span>View Rankings</span>
+            <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .tierlist-card {
+    /* Card animations and interactions */
+    .card-container {
+      will-change: transform, box-shadow;
+    }
+    
+    /* Image fade-in animation */
+    .tierlist-image {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    /* Text line clamping for consistent layout */
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* Hover effects */
+    &:hover {
+      .card-title {
+        text-decoration: none;
+      }
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .tierlist-card {
+      .card-content {
+        padding: 1rem;
+      }
+      
+      .card-title {
+        font-size: 1.125rem;
+        line-height: 1.5;
+      }
+      
+      .image-container img {
+        height: 160px;
+      }
+    }
+  }
+  
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Focus states for accessibility */
+  .tierlist-card a:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 0.75rem;
+  }
+  
+  /* Ensure consistent card heights in grid */
+  .tierlist-card {
+    height: 100%;
+  }
+</style>
