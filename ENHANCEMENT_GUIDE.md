@@ -14,6 +14,11 @@ This guide shows how to use the automated enhancement scripts to improve your ti
 - **API**: Requires `OPENAI_API_KEY` environment variable  
 - **Features**: Category-aware, tier-appropriate language, technical focus, placeholder detection
 
+### 3. Affiliate Link Enhancement (`enhance-tierlists-with-affiliate-links.mjs`)
+- **Purpose**: Ensures all products have valid Amazon affiliate links with correct tracking ID
+- **API**: Uses `AMAZON_ASSOCIATE_TAG` environment variable (defaults to `mythorath-20`)
+- **Features**: Adds missing links, fixes existing Amazon URLs, converts non-Amazon links to Amazon search
+
 ## 🚀 Usage Examples
 
 ### Enhance a Single Tierlist
@@ -24,6 +29,9 @@ node scripts/enhance-tierlists-with-images.mjs src/content/tierlists/best-gaming
 
 # Generate AI reviews
 node scripts/enhance-tierlists-with-reviews.mjs src/content/tierlists/best-gaming-mice-2025.mdx
+
+# Fix affiliate links  
+node scripts/enhance-tierlists-with-affiliate-links.mjs src/content/tierlists/best-gaming-mice-2025.mdx
 ```
 
 ### Batch Enhance All Tierlists
@@ -34,6 +42,9 @@ node scripts/enhance-tierlists-with-images.mjs
 
 # Generate reviews for all files with placeholder/missing reviews
 node scripts/enhance-tierlists-with-reviews.mjs
+
+# Fix affiliate links for all files
+node scripts/enhance-tierlists-with-affiliate-links.mjs
 ```
 
 ### Complete Enhancement Pipeline
@@ -45,9 +56,32 @@ node scripts/enhance-tierlists-with-images.mjs
 # Step 2: Generate missing reviews (OpenAI)
 node scripts/enhance-tierlists-with-reviews.mjs
 
-# Step 3: Review and commit changes
+# Step 3: Fix affiliate links (Amazon Associate)
+node scripts/enhance-tierlists-with-affiliate-links.mjs
+
+# Step 4: Review and commit changes
 git add .
 git commit -m "Enhanced tierlists with images and AI reviews"
+```
+
+## 🔗 Affiliate Link Enhancement Details
+
+### What it fixes:
+- **Empty links**: `""` → `https://www.amazon.com/s?k=Product+Name&tag=mythorath-20`
+- **Missing affiliate tag**: `https://amazon.com/dp/B123` → `https://amazon.com/dp/B123?tag=mythorath-20`
+- **Wrong affiliate tag**: `https://amzn.to/xyz?tag=wrong-20` → `https://amzn.to/xyz?tag=mythorath-20`
+- **Non-Amazon links**: `https://bestbuy.com/...` → `https://www.amazon.com/s?k=Product+Name&tag=mythorath-20`
+- **Products without links**: Generates Amazon search URLs with affiliate tracking
+
+### Configuration:
+```bash
+# Set your Amazon Associate Tag in .env
+AMAZON_ASSOCIATE_TAG=mythorath-20
+```
+
+### Demo the functionality:
+```bash
+node scripts/demo-affiliate-link-enhancer.mjs
 ```
 
 ## 🔧 Configuration

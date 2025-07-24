@@ -102,6 +102,8 @@ Every page should:
 
     enhance-tierlists-with-reviews.mjs: Auto-enhances existing tierlists with AI-generated product reviews using OpenAI
 
+    enhance-tierlists-with-affiliate-links.mjs: Auto-enhances existing tierlists with proper Amazon affiliate links using tracking ID
+
     GitHub Actions to run the above and deploy to Vercel
 
 🖼️ Image Management
