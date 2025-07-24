@@ -100,6 +100,8 @@ Every page should:
 
     enhance-tierlists-with-images.mjs: Auto-enhances existing tierlists with missing product images using SerpAPI
 
+    enhance-tierlists-with-reviews.mjs: Auto-enhances existing tierlists with AI-generated product reviews using OpenAI
+
     GitHub Actions to run the above and deploy to Vercel
 
 🖼️ Image Management
