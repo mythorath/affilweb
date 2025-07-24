@@ -1,0 +1,39 @@
+{
+  "title": "Best Gaming Mice 2025",
+  "description": "Top gaming mice ranked by performance, features, and value",
+  "pubDate": "2025-07-23",
+  "image": "/images/gaming-mice.jpg",
+  "tags": ["gaming", "mice", "peripherals", "reviews", "2025"],
+  "introText": "A comprehensive ranking of the best gaming mice available in 2025, tested for precision, comfort, and durability.",
+  "tiers": {
+    "S": [
+      {
+        "name": "Logitech G Pro X Superlight",
+        "review": "Ultra-lightweight design with exceptional sensor accuracy. Perfect for competitive gaming with its 25,600 DPI HERO sensor.",
+        "link": "https://amzn.to/logitech-gpro-superlight",
+        "image": "https://images-na.ssl-images-amazon.com/images/I/61mpMH5TzkL._AC_SL1500_.jpg"
+      }
+    ],
+    "A": [
+      {
+        "name": "Razer DeathAdder V3",
+        "review": "Ergonomic design with excellent build quality. The Focus Pro 30K sensor delivers precision for long gaming sessions.",
+        "link": "https://amzn.to/razer-deathadder-v3",
+        "image": "https://images-na.ssl-images-amazon.com/images/I/61y+l9x8zBL._AC_SL1500_.jpg"
+      },
+      {
+        "name": "SteelSeries Rival 600",
+        "review": "Dual sensor system provides unmatched accuracy. Customizable weight system lets you find the perfect balance.",
+        "link": "https://amzn.to/steelseries-rival-600"
+      }
+    ],
+    "B": [
+      {
+        "name": "Corsair M65 RGB Elite",
+        "review": "Solid mid-range option with good build quality. The adjustable DPI and comfortable grip make it reliable for daily use.",
+        "link": "https://amzn.to/corsair-m65-elite",
+        "image": "https://images-na.ssl-images-amazon.com/images/I/71F5xVJq3PL._AC_SL1500_.jpg"
+      }
+    ]
+  }
+}
