@@ -22,31 +22,36 @@ async function testFallbackImageSearch() {
     
     try {
       const startTime = Date.now();
-      const imageUrl = await fetchProductImageFallback(productName);
+      const imageResult = await fetchProductImageFallback(productName);
       const endTime = Date.now();
       
-      if (imageUrl) {
+      if (imageResult.url) {
         console.log(`✅ SUCCESS: Found fallback image in ${endTime - startTime}ms`);
-        console.log(`📷 Image URL: ${imageUrl}`);
-        console.log(`📏 URL Length: ${imageUrl.length} characters`);
+        console.log(`📷 Image URL: ${imageResult.url}`);
+        console.log(`📊 Image Source: ${imageResult.source}`);
+        console.log(`📏 URL Length: ${imageResult.url.length} characters`);
         
         // Basic URL validation
-        if (imageUrl.startsWith('https://')) {
+        if (imageResult.url.startsWith('https://')) {
           console.log('✓ URL uses HTTPS');
         }
         
-        // Check image source
-        if (imageUrl.includes('duckduckgo')) {
-          console.log('🦆 Source: DuckDuckGo');
-        } else if (imageUrl.includes('unsplash')) {
+        // Check image source type
+        if (imageResult.source === 'search_engine_retail') {
+          console.log('🛒 Source: Search Engine (Retail Domain)');
+        } else if (imageResult.source === 'search_engine') {
+          console.log('🔍 Source: Search Engine (Generic)');
+        } else if (imageResult.source === 'duckduckgo') {
+          console.log('🦆 Source: DuckDuckGo API');
+        } else if (imageResult.source === 'unsplash') {
           console.log('📸 Source: Unsplash');
-        } else if (imageUrl.includes('wikipedia')) {
+        } else if (imageResult.source === 'wikipedia') {
           console.log('📖 Source: Wikipedia');
         } else {
-          console.log('🌐 Source: Other');
+          console.log(`🌐 Source: ${imageResult.source}`);
         }
       } else {
-        console.log(`❌ FAILED: No fallback image found in ${endTime - startTime}ms`);
+        console.log(`❌ FAILED: No fallback image found in ${endTime - startTime}ms (Source: ${imageResult.source})`);
       }
     } catch (error) {
       console.error(`💥 ERROR: ${error.message}`);
@@ -72,20 +77,25 @@ async function testFallbackImageSearch() {
     
     try {
       const startTime = Date.now();
-      const imageUrl = await fetchAmazonImage(asin);
+      const imageResult = await fetchAmazonImage(asin);
       const endTime = Date.now();
       
-      if (imageUrl) {
+      if (imageResult.url) {
         console.log(`✅ SUCCESS: Found image in ${endTime - startTime}ms`);
-        console.log(`📷 Image URL: ${imageUrl.substring(0, 80)}...`);
+        console.log(`📷 Image URL: ${imageResult.url.substring(0, 80)}...`);
+        console.log(`📊 Image Source: ${imageResult.source}`);
         
-        if (imageUrl.includes('amazon')) {
+        if (imageResult.source === 'amazon_cdn') {
           console.log('🛒 Source: Amazon CDN');
+        } else if (imageResult.source === 'amazon_scraping') {
+          console.log('� Source: Amazon Scraping');
+        } else if (imageResult.source === 'search_engine_retail') {
+          console.log('🛒 Source: Search Engine (Retail)');
         } else {
-          console.log('🔄 Source: Fallback search');
+          console.log(`🔄 Source: ${imageResult.source} (Fallback)`);
         }
       } else {
-        console.log(`❌ FAILED: No image found in ${endTime - startTime}ms`);
+        console.log(`❌ FAILED: No image found in ${endTime - startTime}ms (Source: ${imageResult.source})`);
       }
     } catch (error) {
       console.error(`💥 ERROR: ${error.message}`);

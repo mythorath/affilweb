@@ -95,8 +95,10 @@ export async function fetchAmazonImage(asin) {
   // Validate ASIN format
   if (!asin || typeof asin !== 'string' || !/^[A-Z0-9]{10}$/.test(asin)) {
     console.warn(`Invalid ASIN format: ${asin}`);
-    return null;
+    return { url: null, source: 'error' };
   }
+
+  console.log(`🔍 Fetching Amazon image for ASIN: ${asin}`);
 
   // Common Amazon image URL patterns to try
   const imagePatterns = [
@@ -127,35 +129,35 @@ export async function fetchAmazonImage(asin) {
       });
       
       if (response.ok && response.headers.get('content-type')?.startsWith('image/')) {
-        console.log(`✅ Found Amazon image for ASIN ${asin}: ${imageUrl}`);
-        return imageUrl;
+        console.log(`✅ Found Amazon CDN image for ASIN ${asin}: ${imageUrl}`);
+        return { url: imageUrl, source: 'amazon_cdn' };
       }
     } catch (error) {
       // Log the error and continue to next pattern
-      console.debug(`Image URL failed: ${imageUrl} - ${error.message}`);
+      console.debug(`CDN URL failed: ${imageUrl} - ${error.message}`);
     }
   }
 
   // If no direct CDN images work, try scraping the product page
   try {
+    console.log(`🔍 Scraping Amazon product page for ASIN: ${asin}`);
     const scrapedImage = await scrapeAmazonProductImage(asin);
     if (scrapedImage) {
-      return scrapedImage;
+      return { url: scrapedImage, source: 'amazon_scraping' };
     }
   } catch (error) {
     console.warn(`Failed to scrape image for ASIN ${asin}:`, error.message);
   }
 
   // Last resort: Try fallback image search if we have a product name
-  // This would require the product name to be passed or derived from ASIN
   console.log(`🔄 Attempting fallback image search for ASIN: ${asin}`);
   try {
     // Try to get product name from Amazon first, then search for images
     const productName = await getProductNameFromASIN(asin);
     if (productName) {
-      const fallbackImage = await fetchProductImageFallback(productName);
-      if (fallbackImage) {
-        return fallbackImage;
+      const fallbackResult = await fetchProductImageFallback(productName);
+      if (fallbackResult.url) {
+        return fallbackResult;
       }
     }
   } catch (error) {
@@ -163,7 +165,7 @@ export async function fetchAmazonImage(asin) {
   }
 
   console.warn(`❌ No image found for ASIN: ${asin}`);
-  return null;
+  return { url: null, source: 'none' };
 }
 
 /**
@@ -332,29 +334,99 @@ export async function fetchAmazonImagesBatch(asins, delay = 1000) {
 }
 
 /**
+ * Search for product images using search engines, prioritizing retail domains
+ * @param {string} productName - Product name to search for
+ * @returns {Promise<{url: string|null, source: string}>} Image URL and source type
+ */
+export async function fetchProductImageFromSearchEngine(productName) {
+  console.log(`🔍 Searching search engines for: "${productName}"`);
+  
+  // Try DuckDuckGo image search first (scraping approach for retail domains)
+  try {
+    console.log(`🦆 Trying DuckDuckGo image search for: "${productName}"`);
+    
+    const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(productName + ' product')}&t=h_&iax=images&ia=images`;
+    
+    const response = await fetch(searchUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      },
+      timeout: 10000
+    });
+
+    if (response.ok) {
+      const html = await response.text();
+      
+      // Look for high-quality images from preferred retail domains
+      const preferredDomains = [
+        'amazon.com', 'amazon.co.uk', 'bestbuy.com', 'newegg.com',
+        'logitech.com', 'corsair.com', 'razer.com', 'steelseries.com',
+        'hyperx.com', 'asus.com', 'msi.com', 'sony.com', 'apple.com',
+        'walmart.com', 'target.com', 'microcenter.com'
+      ];
+      
+      // Extract high-resolution image URLs
+      const imageRegex = /"(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp)(?:\?[^"]*)?)"[^>]*(?:width|height)="(?:500|800|1024|1200|1500|2000)/gi;
+      let match;
+      
+      while ((match = imageRegex.exec(html)) !== null) {
+        const imageUrl = match[1];
+        
+        // Prioritize images from retail domains
+        for (const domain of preferredDomains) {
+          if (imageUrl.includes(domain)) {
+            console.log(`✅ Found ${domain} image via search: ${imageUrl}`);
+            return { url: imageUrl, source: 'search_engine_retail' };
+          }
+        }
+      }
+      
+      // If no retail domain found, try any high-quality image
+      const anyImageMatch = html.match(/"(https?:\/\/[^"]+\.(?:jpg|jpeg|png)(?:\?[^"]*)?)"[^>]*(?:width|height)="(?:1024|1200|1500)/i);
+      
+      if (anyImageMatch) {
+        console.log(`✅ Found search engine image: ${anyImageMatch[1]}`);
+        return { url: anyImageMatch[1], source: 'search_engine' };
+      }
+    }
+  } catch (error) {
+    console.debug('DuckDuckGo image search failed:', error.message);
+  }
+
+  // Return no result if search engine scraping fails
+  return { url: null, source: 'none' };
+}
+
+/**
  * Fetches a product image using DuckDuckGo Instant Answer API as a fallback
  * @param {string} productName - The product name to search for
- * @returns {Promise<string|null>} Image URL or null if not found
+ * @returns {Promise<{url: string|null, source: string}>} Image result with URL and source
  * 
  * @example
- * const imageUrl = await fetchProductImageFallback('Steelcase Leap V2 Chair');
- * if (imageUrl) {
- *   console.log('Found fallback image:', imageUrl);
+ * const result = await fetchProductImageFallback('Steelcase Leap V2 Chair');
+ * if (result.url) {
+ *   console.log('Found fallback image:', result.url, 'from', result.source);
  * }
  */
 export async function fetchProductImageFallback(productName) {
   if (!productName || typeof productName !== 'string') {
     console.warn('Invalid product name provided for fallback image search');
-    return null;
+    return { url: null, source: 'none' };
   }
 
   console.log(`🔍 Searching for fallback image: "${productName}"`);
 
   try {
-    // Try DuckDuckGo Instant Answer API first
+    // Try search engines first for retail domain images
+    const searchResult = await fetchProductImageFromSearchEngine(productName);
+    if (searchResult.url) {
+      return searchResult;
+    }
+
+    // Try DuckDuckGo Instant Answer API
     const ddgImage = await searchDuckDuckGoImage(productName);
     if (ddgImage) {
-      return ddgImage;
+      return { url: ddgImage, source: 'duckduckgo' };
     }
 
     // Try alternative image search APIs
@@ -364,11 +436,11 @@ export async function fetchProductImageFallback(productName) {
     }
 
     console.log(`❌ No fallback image found for: "${productName}"`);
-    return null;
+    return { url: null, source: 'none' };
 
   } catch (error) {
     console.warn(`Fallback image search failed for "${productName}":`, error.message);
-    return null;
+    return { url: null, source: 'error' };
   }
 }
 
@@ -432,26 +504,26 @@ async function searchDuckDuckGoImage(productName) {
  * Search for product images using alternative APIs
  * @private
  * @param {string} productName - Product name to search
- * @returns {Promise<string|null>} Image URL or null
+ * @returns {Promise<{url: string|null, source: string}>} Image result with URL and source
  */
 async function searchAlternativeImageAPI(productName) {
   try {
     // Try Unsplash API for product-related images (requires API key but has free tier)
-    const unsplashImage = await searchUnsplashImage(productName);
-    if (unsplashImage) {
-      return unsplashImage;
+    const unsplashResult = await searchUnsplashImage(productName);
+    if (unsplashResult) {
+      return { url: unsplashResult, source: 'unsplash' };
     }
 
     // Try Wikipedia/Wikidata API for product images
-    const wikipediaImage = await searchWikipediaImage(productName);
-    if (wikipediaImage) {
-      return wikipediaImage;
+    const wikipediaResult = await searchWikipediaImage(productName);
+    if (wikipediaResult) {
+      return { url: wikipediaResult, source: 'wikipedia' };
     }
 
-    return null;
+    return { url: null, source: 'none' };
   } catch (error) {
     console.debug(`Alternative image search failed: ${error.message}`);
-    return null;
+    return { url: null, source: 'error' };
   }
 }
 
