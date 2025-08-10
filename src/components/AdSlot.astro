@@ -1,0 +1,52 @@
+---
+export interface Props {
+  slot: 'header' | 'inline' | 'sidebar' | 'footer';
+  limit?: number;
+}
+
+const { slot, limit = 1 } = Astro.props;
+import ads from '../config/ads.json';
+
+const items = (ads?.slots?.[slot] || []).slice(0, limit);
+---
+
+{items.length > 0 && (
+  <div class={`ad-slot ad-slot-${slot}`}>
+    {items.map((ad) => (
+      <a href={ad.url} rel="sponsored noopener" target="_blank" class="ad-pill">
+        <span class="title">{ad.title}</span>
+        <span class="desc">{ad.description}</span>
+      </a>
+    ))}
+  </div>
+)}
+
+<style>
+  .ad-slot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .ad-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #1f2937;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .ad-pill:hover {
+    border-color: #3b82f6;
+    color: #1d4ed8;
+    transform: translateY(-1px);
+  }
+  .ad-pill .title { font-weight: 600; }
+  .ad-pill .desc { font-size: 0.8rem; color: #6b7280; }
+</style>
+
+

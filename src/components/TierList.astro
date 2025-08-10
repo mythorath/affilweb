@@ -25,30 +25,33 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
 
 <div class="tier-list">
   {sortedTiers.map((tierKey) => (
-    <section class="tier-section mb-6">
-      <h2 class="tier-heading text-xl font-bold mb-4 bg-gray-100 p-4 rounded">
-        Tier {tierKey}
+    <section class="tier-section mb-10">
+      <h2 class="tier-heading text-2xl font-bold mb-6 p-4 rounded-lg flex items-center gap-3">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white">
+          {tierKey}
+        </span>
+        <span>Tier {tierKey}</span>
       </h2>
-      
+
       <div class="products-grid">
         {tiers[tierKey].map((product) => (
-          <div class="product-card bg-white border border-gray-200 p-4 rounded mb-4 shadow-sm">
+          <div class="product-card bg-white border border-gray-200 p-5 rounded-xl shadow-sm hover:shadow-md">
             {product.image && (
               <div class="product-image mb-3">
                 <img 
                   src={product.image} 
                   alt={product.name}
-                  class="w-full h-32 object-cover rounded"
+                  class="w-full h-40 object-cover rounded-lg"
                   loading="lazy"
                 />
               </div>
             )}
             
-            <h3 class="product-name text-lg font-semibold mb-2">
+            <h3 class="product-name text-lg font-semibold mb-2 line-clamp-2">
               {product.name}
             </h3>
             
-            <p class="product-review text-gray-700 mb-3">
+            <p class="product-review text-gray-700 mb-4 text-sm leading-relaxed">
               {product.review}
             </p>
             
@@ -57,7 +60,7 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
             ) : (
               <a 
                 href={product.link}
-                class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                class="buy-now-button inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
                 rel="sponsored"
                 target="_blank"
               >
@@ -73,13 +76,13 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
 
 <style>
   .tier-list {
-    max-width: 800px;
+    max-width: 960px;
     margin: 0 auto;
   }
   
   .tier-heading {
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    border-left: 4px solid #3b82f6;
+    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    border-left: 6px solid #3b82f6;
   }
   
   .product-card {
@@ -87,8 +90,8 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
   }
   
   .product-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   }
   
   .buy-now-button {
@@ -98,5 +101,12 @@ const sortedTiers = tierOrder.filter(tier => tiers[tier] && tiers[tier].length >
   
   .buy-now-button:hover {
     text-decoration: none;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style>

@@ -1,0 +1,46 @@
+🧠 Task: Create a script to auto-generate .mdx tierlist files
+
+📁 File Location Suggestion: scripts/generateTierlist.ts
+
+✍️ Script Functionality:
+
+    Accept a JSON input with:
+
+        title, description, pubDate, image, tags
+
+        a dictionary of tier names (e.g., S/A/B) with product arrays
+
+    Each product should have name, review, and link
+
+    Output a .mdx file to src/content/tierlists/, using a kebab-case filename from the title
+
+🧩 Format to Match:
+Use the following structure:
+
+---
+title: Best Budget Laptops 2025
+description: Top budget laptops ranked by value, performance, and build quality...
+pubDate: 2025-07-22
+image: /images/budget-laptops.jpg
+tags: [laptops, budget, tech, students]
+---
+
+import TierList from '../../components/TierList.astro'
+
+# Best Budget Laptops 2025
+
+Top budget laptops ranked by value, performance, and build quality...
+
+<TierList tiers={{
+  "S": [
+    {
+      name: "Acer Aspire 5",
+      review: "Incredible value for the price. Solid performance and display.",
+      link: "https://amzn.to/example"
+    }
+  ],
+  "A": [...],
+  "B": [...]
+}} />
+
+📤 Output Path: src/content/tierlists/{slugified-title}.mdx

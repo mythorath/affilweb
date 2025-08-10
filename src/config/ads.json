@@ -1,0 +1,17 @@
+{
+  "meta": { "generatedAt": "default" },
+  "slots": {
+    "header": [
+      { "title": "Subscribe to TrendTiers", "url": "/about", "description": "Get new rankings weekly" }
+    ],
+    "inline": [
+      { "title": "Support us via our affiliate links", "url": "/affiliate-disclosure", "description": "It helps keep the site free" }
+    ],
+    "sidebar": [],
+    "footer": [
+      { "title": "Latest Tier Lists", "url": "/", "description": "See what’s new" }
+    ]
+  }
+}
+
+

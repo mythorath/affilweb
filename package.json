@@ -7,7 +7,11 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "run:auto": "node scripts/run-automation.mjs",
+    "validate:images": "node scripts/validate-images.mjs",
+    "ads:gen": "node scripts/generate-ads-config.mjs",
+    "run:forever": "node scripts/run-forever.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^2.0.0",

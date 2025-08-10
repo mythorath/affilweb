@@ -8,6 +8,9 @@
 import * as cheerio from 'cheerio';
 import { fetchImageFromSerpAPI } from './imageSearch.js';
 
+// Use environment-configured Amazon associate tag with a safe default
+const AMAZON_ASSOCIATE_TAG = process.env.AMAZON_ASSOCIATE_TAG || 'mythorath-20';
+
 /**
  * Converts a raw Amazon product URL or ASIN to an affiliate link
  * @param {string} urlOrASIN - Either a full Amazon URL or just an ASIN
@@ -25,7 +28,7 @@ import { fetchImageFromSerpAPI } from './imageSearch.js';
 export function getAmazonAffiliateLink(urlOrASIN) {
   // If it's already an ASIN (10 characters, alphanumeric), use it directly
   if (urlOrASIN.length === 10 && /^[A-Z0-9]{10}$/.test(urlOrASIN)) {
-    return `https://www.amazon.com/dp/${urlOrASIN}/?tag=mythorath-20`;
+    return `https://www.amazon.com/dp/${urlOrASIN}/?tag=${AMAZON_ASSOCIATE_TAG}`;
   }
   
   // Extract ASIN from Amazon URL
@@ -33,7 +36,7 @@ export function getAmazonAffiliateLink(urlOrASIN) {
     const asinMatch = urlOrASIN.match(/\/([A-Z0-9]{10})(?:[/?]|$)/);
     if (asinMatch && asinMatch[1]) {
       const asin = asinMatch[1];
-      return `https://www.amazon.com/dp/${asin}/?tag=mythorath-20`;
+      return `https://www.amazon.com/dp/${asin}/?tag=${AMAZON_ASSOCIATE_TAG}`;
     }
   }
   
@@ -47,7 +50,7 @@ export function getAmazonAffiliateLink(urlOrASIN) {
  * @returns {boolean} True if already has mythorath-20 tag
  */
 export function isOurAffiliateLink(url) {
-  return url.includes('tag=mythorath-20');
+  return url.includes(`tag=${AMAZON_ASSOCIATE_TAG}`);
 }
 
 /**
@@ -71,7 +74,7 @@ export function extractASIN(url) {
  */
 export function getShortAffiliateLink(asin) {
   // This is the format for short links, but they need to be registered with Amazon
-  return `https://amzn.to/${asin}?tag=mythorath-20`;
+  return `https://amzn.to/${asin}?tag=${AMAZON_ASSOCIATE_TAG}`;
 }
 
 /**

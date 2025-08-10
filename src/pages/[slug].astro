@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import AdSlot from '../components/AdSlot.astro';
 
 export async function getStaticPaths() {
   try {
@@ -71,6 +72,10 @@ const products = post.data.products || [
           ))}
         </div>
       )}
+      <!-- Inline Ad Slot under header -->
+      <div class="mt-6 flex justify-center">
+        <AdSlot slot="inline" limit={2} />
+      </div>
     </header>
     
     <div class="tier-list-content">
@@ -83,6 +88,9 @@ const products = post.data.products || [
           <strong>Affiliate Disclosure:</strong> This post contains affiliate links. 
           We may earn a commission if you make a purchase through these links at no additional cost to you.
         </p>
+        <div class="my-4 flex justify-center">
+          <AdSlot slot="footer" limit={3} />
+        </div>
         <a href="/" class="text-blue-600 hover:underline">← Back to Home</a>
       </div>
     </footer>

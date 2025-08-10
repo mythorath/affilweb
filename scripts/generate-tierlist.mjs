@@ -45,25 +45,46 @@ const openai = new OpenAI({
 });
 
 /**
- * Step 1: Find trending product categories using SerpAPI
+ * Step 1: Find trending product categories using SerpAPI (Trending Now), fallback to predefined list
  */
 async function findTrendingCategories() {
   console.log('🔍 Step 1: Finding trending product categories...');
-  
+
+  // Attempt dynamic discovery via SerpAPI trending now
   try {
-    // For now, we'll use our predefined trending categories
-    // In production, this could query Google Trends API or Reddit
-    const selectedCategory = CONFIG.trendingCategories[
-      Math.floor(Math.random() * CONFIG.trendingCategories.length)
-    ];
-    
-    console.log(`✅ Selected category: "${selectedCategory}"`);
-    return selectedCategory;
-    
-  } catch (error) {
-    console.error('❌ Error finding trending categories:', error.message);
-    throw error;
+    const trendsUrl = `https://serpapi.com/search.json?engine=google_trends_trending_now&api_key=${CONFIG.serpApiKey}&geo=US`;
+    const resp = await fetch(trendsUrl);
+    if (resp.ok) {
+      const data = await resp.json();
+      const stories = data.trending_stories || [];
+      // Convert trending topics to product-style categories
+      const mapped = stories
+        .map(s => s?.title)
+        .filter(Boolean)
+        .map(title => `best ${title.toLowerCase()} 2025`)
+        // Basic cleanup
+        .map(t => t.replace(/\bnews\b|\bupdate\b|\bvideo\b/gi, '').trim())
+        .filter(t => t.length > 12)
+        .slice(0, 20);
+
+      if (mapped.length > 0) {
+        const pick = mapped[Math.floor(Math.random() * mapped.length)];
+        console.log(`✅ Selected dynamic category: "${pick}"`);
+        return pick;
+      }
+    } else {
+      console.warn('⚠️ Trending Now request failed:', resp.status, resp.statusText);
+    }
+  } catch (e) {
+    console.warn('⚠️ Dynamic trend discovery failed:', e.message);
   }
+
+  // Fallback to predefined trending categories
+  const selectedCategory = CONFIG.trendingCategories[
+    Math.floor(Math.random() * CONFIG.trendingCategories.length)
+  ];
+  console.log(`✅ Selected fallback category: "${selectedCategory}"`);
+  return selectedCategory;
 }
 
 /**
@@ -208,7 +229,7 @@ async function generateTierlistContent(products, category) {
   console.log('🤖 Step 4: Generating tierlist content with OpenAI...');
   
   try {
-    const prompt = `You are an expert product reviewer creating a comprehensive tier list for "${category}". Write in an engaging, authoritative tone that builds trust with readers.
+    const prompt = `You are an expert product reviewer creating a comprehensive tier list for "${category}". Write in an engaging, authoritative tone that builds trust with readers. Avoid fluff; be specific and balanced.
 
 Here are the products to rank and review:
 
@@ -247,9 +268,27 @@ Format your response as JSON:
   "summary": "Comprehensive summary that reinforces the value and guides next steps...",
   "tags": ["primary-category", "secondary-category", "year", "guide-type", "audience", "feature"],
   "tiers": {
-    "S": [{"name": "Exact Product Name", "review": "Detailed 2-3 sentence review with specific features and benefits"}],
-    "A": [{"name": "Exact Product Name", "review": "Detailed 2-3 sentence review with specific features and benefits"}],
-    "B": [{"name": "Exact Product Name", "review": "Detailed 2-3 sentence review with specific features and benefits"}]
+    "S": [{
+      "name": "Exact Product Name",
+      "review": "Detailed 2-3 sentence review with specific features and benefits",
+      "pros": ["short, factual pro", "short, factual pro"],
+      "cons": ["short, factual con"],
+      "specs": ["key spec", "key spec"]
+    }],
+    "A": [{
+      "name": "Exact Product Name",
+      "review": "Detailed 2-3 sentence review with specific features and benefits",
+      "pros": ["short, factual pro"],
+      "cons": ["short, factual con"],
+      "specs": ["key spec"]
+    }],
+    "B": [{
+      "name": "Exact Product Name",
+      "review": "Detailed 2-3 sentence review with specific features and benefits",
+      "pros": ["short, factual pro"],
+      "cons": ["short, factual con"],
+      "specs": ["key spec"]
+    }]
   }
 }`;
 

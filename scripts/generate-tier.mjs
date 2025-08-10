@@ -235,7 +235,7 @@ async function generateTierList(topic) {
   try {
     console.log(`🚀 Generating tier list for: "${topic}"`);
     
-    // Generate content using OpenAI
+    // Generate content using OpenAI with richer structure (pros/cons/specs and affiliate-ready)
     console.log('📡 Calling OpenAI API...');
     const data = await generateTierListContent(topic);
     
